@@ -1,0 +1,95 @@
+@font-face {
+    font-family: 'Helvetica';
+    src: url(/Neverlonely/Assets/Font/Helvetica.ttf);
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: helvetica;
+    line-height: 1.5rem;
+}
+
+:root {
+    --bg-color: #ffff;
+    --second-bg-color: #e3e3e3;
+    --text: #000000;
+    --second-text: #ffffff;
+}
+
+.darkmode {
+    --bg-color: #1f242d;
+    --second-bg-color: #323946;
+    --text: #ffffff;
+    --second-text: #000000;
+}
+
+.logo img {
+    position: relative;
+    top: 0%;
+    left: 20%;
+    width: 80%;
+    height: 80%;
+
+}
+
+#sidebar {
+    box-sizing: border-box;
+    height: 100vh;
+    width: 20%;
+    padding: 5px 1em;
+    background-color: var(--bg-color);
+    border-right: 1px solid var(--text);
+
+position: sticky;
+top: 0;
+align-self: start;
+
+}
+
+#sidebar ul {
+    list-style: none;
+}
+
+#sidebar > ul > li:first-child {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+#sidebar ul li.active {
+    background-color: var(--second-bg-color);
+    border-radius: .5em;
+}
+
+#sidebar a, #sidebar .logo {
+    border-radius: .5em;
+    padding: .85em;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+#sidebar a:hover {
+    background-color: var(--second-bg-color);
+}
+
+#toggle-btn {
+    position: relative;
+    margin-left: auto;
+    padding: 1em;
+    border: none;
+    border-radius: .5em;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    span{
+        transition: rotate 150ms ease;
+    }
+}
+
+#toggle-btn:hover {
+    background-color: var(--second-bg-color);
+}
