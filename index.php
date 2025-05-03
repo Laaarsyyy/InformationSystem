@@ -20,21 +20,13 @@
 
                 <div class="input-box">
                     <span class="icon"><IoMailSharp /></span>
-<<<<<<< HEAD:index.php
-                    <input type="text" name="username" required />
-=======
                     <input type="text" name="username" required/>
->>>>>>> 01ca0da11dfa4aec4cf2995c90f698cb8f17e2a3:Neverlonely/index.php
                     <label>Username</label>
                 </div>
 
                 <div class="input-box">
                     <span class="icon"><FaLock /></span>
-<<<<<<< HEAD:index.php
-                    <input type="password" name="password" required />
-=======
                     <input type="password" name="password" required/>
->>>>>>> 01ca0da11dfa4aec4cf2995c90f698cb8f17e2a3:Neverlonely/index.php
                     <label>Password</label>
                 </div>
 

@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $user['role'];
 
             if ($user['role'] == 'admin') {
-                header("Location: adminDash.php");
+                header("Location: admin/adminDash.php");
             } else {
                 header("Location: staffDash.php");
             }
