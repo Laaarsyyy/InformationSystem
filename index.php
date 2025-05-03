@@ -16,17 +16,17 @@
 
         <div class="form-box login">
             <h2>Login</h2>
-            <form action="#">
+            <form action="login.php" method="POST">
 
                 <div class="input-box">
                     <span class="icon"><IoMailSharp /></span>
-                    <input type="text" required/>
+                    <input type="text" name="username" required/>
                     <label>Username</label>
                 </div>
 
                 <div class="input-box">
                     <span class="icon"><FaLock /></span>
-                    <input type="password" required/>
+                    <input type="password" name="password" required/>
                     <label>Password</label>
                 </div>
 

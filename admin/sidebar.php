@@ -10,59 +10,66 @@
 
     <!-- css -->
     <link rel="stylesheet" href="/Neverlonely/Assets/css/sidebar.css">
+
 </head>
 <body>
     <nav id="sidebar">
         <ul>
             <li>
                 <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt=""></span>
-                <button id="toggle-btn">
+                <button onclick=toggleSidebar() id="toggle-btn">
                     <span class="material-icons">keyboard_double_arrow_right</span>
                 </button>
             </li>
 
             <li class="active">
-                <a href="sidebar.html">
+                <a href="/Neverlonely/admin/adminDash.php">
                     <span class="material-icons">dashboard</span>
                     <span>Home</span>
                 </a>
             </li>
 
             <li>
-                <a href="sidebar.html">
+                <a href="/Neverlonely/admin/manageProducts.php">
                     <span class="material-icons">inventory_2</span>
                     <span>Manage Products</span>
                 </a>
             </li>
 
             <li>
-                <a href="sidebar.html">
+                <a href="/Neverlonely/admin/salesRecords.php">
                     <span class="material-icons">shopping_cart</span>
                     <span>Sales Records</span>
                 </a>
             </li>
 
             <li>
-                <a href="sidebar.html">
+                <a href="/Neverlonely/admin/generateRecords.php">
                     <span class="material-icons">bar_chart</span>
                     <span>Generate Records</span>
                 </a>
             </li>
 
             <li>
-                <a href="sidebar.html">
+                <a href="/Neverlonely/admin/manageUsers.php">
                     <span class="material-icons">group</span>
                     <span>Manage Users</span>
                 </a>
             </li>
 
             <li>
-                <a href="sidebar.html">
+                <a href="/Neverlonely/logout.php">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
             </li>
         </ul>
     </nav>
+
+
+
+
+        <!-- js -->
+        <script src="/Neverlonely/Assets/javascript/sidebar.js"></script>
 </body>
 </html>
