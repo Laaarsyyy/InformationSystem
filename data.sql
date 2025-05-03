@@ -25,7 +25,7 @@ CREATE TABLE product_variants (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     size ENUM('S', 'M', 'L', 'XL') NOT NULL,
-    stock INT DEFAULT 0,
+    stock_quantity INT DEFAULT 0,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
