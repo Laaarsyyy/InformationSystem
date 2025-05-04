@@ -244,3 +244,110 @@ body {
     width: 57%;
 }
 
+
+/* Manage Products Contents */
+.products-table {
+    position: absolute;
+    left: 25%;
+    top: 30%;
+    width: 70%;
+}
+
+.manage-products-container {
+    position: absolute;
+    width: 50%;
+    top: 8%;
+    left: 20%;
+    margin-bottom: 20px;
+    padding: min(3em, 15%);
+}
+
+.add-product-btn {
+    position: absolute;
+    top: 75%;
+    left: 7%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    height: 30px;
+    width: 150px;
+    background-color: var(--text);
+    text-decoration: none;
+    color: var(--second-text);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+/* Manage Products Contents -----MODAL */
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 50%;
+    height: 50%;
+    border-radius: 8px;
+    position: relative;
+}
+
+.modal-content h2 {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.modal .close {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.variant-group {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal-addProduct-btn {
+    position: absolute;
+    top: 88%;
+    left: 78%;
+    width: 20%;
+    height: 10%;
+    background: var(--text);
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: var(--second-text);
+    font-weight: 500;
+}
+

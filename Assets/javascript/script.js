@@ -31,3 +31,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Modal
+function openModal() {
+    document.getElementById('productModal').style.display = 'block';
+}
+
+    function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
+    }
+
+  // Close Modal
+window.onclick = function(event) {
+    const modal = document.getElementById('productModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+};
+
+function addVariant() {
+    const container = document.getElementById('variant-container');
+    const group = document.createElement('div');
+    group.classList.add('variant-group');
+    group.innerHTML = `
+                    <label>Size and Stocks
+                        <input type="text" name="sizes[]" placeholder="Size (e.g. S)" required>
+                        <input type="number" name="stocks[]" placeholder="Stock Quantity" required>
+                    </label>
+        `;
+        container.appendChild(group);
+}
+
