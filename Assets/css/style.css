@@ -246,12 +246,6 @@ body {
 
 
 /* Manage Products Contents */
-.products-table {
-    position: absolute;
-    left: 25%;
-    top: 30%;
-    width: 70%;
-}
 
 .manage-products-container {
     position: absolute;
@@ -264,7 +258,7 @@ body {
 
 .add-product-btn {
     position: absolute;
-    top: 75%;
+    top: 70%;
     left: 7%;
     display: flex;
     align-items: center;
@@ -276,6 +270,63 @@ body {
     text-decoration: none;
     color: var(--second-text);
 }
+
+/*   ---------------Table */
+.products-table {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    width: 80%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.products-table th {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--text);
+}
+.products-table td {
+    padding: 12px;
+}
+
+
+
+.products-table td {
+    vertical-align: middle;
+}
+
+.products-table tbody tr:last-child {
+    border-bottom: 1px solid var(--text);
+}
+
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.btn-edit {
+    color: var(--text);
+    background-color: var(--bg-color);
+    border: 1px solid var(--text);
+}
+
+.btn-delete {
+    color: var(--bg-color);
+    background-color: var(--text);
+}
+
+.products-table tr.separator td {
+    border-bottom: 2px solid #ccc;
+    padding: 0;
+}
+
+
+/* Manage Products Contents -----MODAL */
 
 .modal {
     display: none;
@@ -289,23 +340,15 @@ body {
 }
 
 
-/* Manage Products Contents -----MODAL */
-
 form {
+    position: relative;
     display: flex;
     flex-direction: column;
+    z-index: 1001;
 }
 
 form label {
     margin: 10px;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 1000;
 }
 
 .modal-content {
@@ -316,12 +359,23 @@ form label {
     height: 50%;
     border-radius: 8px;
     position: relative;
+    z-index: 1001;
+}
+
+.modal img {
+    position: absolute;
+    width: 50%;
+    z-index: 100;
+    left: 25%;
+    opacity: .2;
 }
 
 .modal-content h2 {
-    color: red;
+    color: var(--text);
     margin-bottom: 20px;
 }
+
+
 
 .modal .close {
     position: absolute;
@@ -333,14 +387,29 @@ form label {
 .variant-group {
     display: flex;
     flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.removeSize-btn {
+    border: none;
+    background-color: transparent;
+    font-size: 25px;
+    margin: 10px;
+    color: var(--text);
+}
+
+.addSize-btn {
+    background: none;
+    border: 1px solid var(--text);
+    cursor: pointer;
 }
 
 .modal-addProduct-btn {
     position: absolute;
     top: 88%;
     left: 78%;
-    width: 20%;
-    height: 10%;
+    width: 150px;
+    height: 40px;
     background: var(--text);
     border: none;
     outline: none;
@@ -349,5 +418,33 @@ form label {
     font-size: 1em;
     color: var(--second-text);
     font-weight: 500;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.inputProduct {
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+
+.inputProduct label {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    text-transform: uppercase;
+    color: var(--second-text);
+    background-color: var(--text);
+    text-align: center;
+    padding: 0px 5px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 3px;
 }
 

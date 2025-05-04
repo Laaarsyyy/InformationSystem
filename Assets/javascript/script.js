@@ -49,16 +49,30 @@ window.onclick = function(event) {
     }
 };
 
+
 function addVariant() {
-    const container = document.getElementById('variant-container');
-    const group = document.createElement('div');
-    group.classList.add('variant-group');
+    const container = document.getElementById("variant-container");
+
+    const group = document.createElement("div");
+    group.className = "variant-group";
+
     group.innerHTML = `
-                    <label>Size and Stocks
-                        <input type="text" name="sizes[]" placeholder="Size (e.g. S)" required>
-                        <input type="number" name="stocks[]" placeholder="Stock Quantity" required>
-                    </label>
-        `;
-        container.appendChild(group);
+        <label>Size and Stocks</label>
+        <input type="text" name="sizes[]" placeholder="Size (e.g. M)" required>
+        <input type="number" name="stocks[]" placeholder="Stock Quantity" required>
+        <button type="button" onclick="removeLastVariant()" class="removeSize-btn"><span class="material-icons">cancel</span></button>
+    `;
+
+    container.appendChild(group);
 }
 
+function removeLastVariant() {
+    const container = document.getElementById("variant-container");
+    const groups = container.querySelectorAll(".variant-group");
+
+    if (groups.length > 1) {
+        container.removeChild(groups[groups.length - 1]);
+    } else {
+        alert("You must have at least one size.");
+    }
+}

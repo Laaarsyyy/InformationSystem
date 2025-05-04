@@ -42,7 +42,7 @@ body {
 
 #sidebar {
     box-sizing: border-box;
-    height: 100vh;
+    height: 200vh;
     width: 20%;
     padding: 5px 1em;
     background-color: var(--bg-color);
@@ -50,7 +50,7 @@ body {
     transition: 300ms ease-in-out;
     text-wrap: nowrap;
 
-    position: relative;
+    position: sticky;
     top: 0;
     align-self: start;
 }
