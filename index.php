@@ -21,14 +21,11 @@
                 <div class="input-box">
                     <span class="icon"><IoMailSharp /></span>
                     <input type="text" name="username" required />
-                    <input type="text" name="username" required />
-                    <input type="text" name="username" required/>
                     <label>Username</label>
                 </div>
 
                 <div class="input-box">
                     <span class="icon"><FaLock /></span>
-                    <input type="password" name="password" required />
                     <input type="password" name="password" required/>
                     <label>Password</label>
                 </div>

@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="icon" href="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png">
-
-        <!-- Chart cdn-->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         
         <!-- css -->
         <link rel="stylesheet" href="/Neverlonely/Assets/css/sidebar.css">
@@ -15,6 +12,8 @@
 
         <!-- css -->
         <script src="/Neverlonely/Assets/javascript/script.js"></script>
+        <!-- Chart cdn-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <title>Neverlonely</title>
 </head>
@@ -42,7 +41,7 @@
                     <div class="card-header">
                         <h3>Revenue</h3>
                     </div>
-                    <p id="revenue">₱0.00</p>
+                    <p id="revenue">₱0.01</p>
                 </div>
 
                 <div class="card">
@@ -61,6 +60,5 @@
 
 
     </div>
-
 </body>
 </html>

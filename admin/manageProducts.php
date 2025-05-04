@@ -18,8 +18,8 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
     <div class="container">
         <h1>Manage Products</h1>
         <a href="addProduct.php" class="add-product-btn"> Add New Product</a>
-
-        <table class="products-table">
+    </div>
+    <table class="products-table">
             <thead>
                 <tr>
                     <th>Product Name</th>
@@ -51,7 +51,6 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
                 <?php endwhile; ?>
             </tbody>
         </table>
-    </div>
 </main>
 
 </body>

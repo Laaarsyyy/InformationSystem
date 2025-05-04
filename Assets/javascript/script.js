@@ -1,19 +1,21 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const canvas = document.getElementById("salesChart");
+document.addEventListener('DOMContentLoaded', () => {
+    // Get the CSS variables
+    const rootStyles = getComputedStyle(document.documentElement);
+    const bgColor = rootStyles.getPropertyValue('--second-bg-color').trim(); // fill color
+    const borderColor = rootStyles.getPropertyValue('--text').trim(); // line color
 
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-
-    const salesChart = new Chart(ctx, {
-        type: "line", 
+    // Initialize the chart
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
         data: {
             labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [{
                 label: "Sales",
-                data: [34, 18, 35, 40, 45, 60],
-                borderColor: 'rgb(0, 0, 0)',
-                backgroundColor: 'rgba(227, 227, 227, 0.5)',
+                data: [34, 18, 35, 40],
+                color: borderColor,
+                borderColor: borderColor,
+                backgroundColor: bgColor,
                 borderWidth: 2,
                 tension: 0.3,
                 fill: true
@@ -27,5 +29,5 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         }
-    })
-})
+    });
+});
