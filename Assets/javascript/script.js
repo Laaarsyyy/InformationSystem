@@ -37,11 +37,11 @@ function openModal() {
     document.getElementById('productModal').style.display = 'block';
 }
 
+ // Close Modal
     function closeModal() {
     document.getElementById('productModal').style.display = 'none';
     }
 
-  // Close Modal
 window.onclick = function(event) {
     const modal = document.getElementById('productModal');
     if (event.target === modal) {
@@ -65,23 +65,23 @@ function addVariant() {
 
     container.appendChild(group);
 }
+//EDIT VARIANT MODAL
+function addExtraVariant() {
+    const container = document.getElementById("extra-variants-container");
 
-function addAnotherSize() {
-    const container = document.getElementById("additional-variants-container");
+    const div = document.createElement("div");
+    div.classList.add("variant-group");
 
-    const group = document.createElement("div");
-    group.className = "variant-group";
-
-    group.innerHTML = `
-        <label>Size
-            <input type="text" name="new_sizes[]" placeholder="Size (e.g. M)" required>
-        </label>
-        <label>Stock
-            <input type="number" name="new_stocks[]" placeholder="Stock Quantity" required>
-        </label>
+    div.innerHTML = `
+        <label>Size and Stocks</label>
+        <input type="text" name="extra_sizes[]" placeholder="Size (e.g. L)" class="slim-input" required>
+        <input type="number" name="extra_stocks[]" placeholder="Stock Quantity" class="slim-input" required>
+        <button type="button" class="removeSize-btn" onclick="this.parentElement.remove()">
+            <span class="material-icons">cancel</span>
+        </button>
     `;
 
-    container.appendChild(group);
+    container.appendChild(div);
 }
 
 function removeLastVariant() {
@@ -134,9 +134,10 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function (
 });
 
 function openEditModal(variantId, size, stock, productId) {
-    document.getElementById("editVariantId").value = variantId;
-    document.getElementById("editSize").value = size;
-    document.getElementById("editStock").value = stock;
-    document.getElementById("editProductId").value = productId;
-    document.getElementById("editModal").style.display = "block";
+    document.getElementById('editVariantId').value = variantId;
+    document.getElementById('editSize').value = size;
+    document.getElementById('editStock').value = stock;
+    document.getElementById('editProductId').value = productId;
+    document.getElementById('extra-variants-container').innerHTML = ''; // Clear previous inputs
+    document.getElementById('editModal').style.display = 'block';
 }

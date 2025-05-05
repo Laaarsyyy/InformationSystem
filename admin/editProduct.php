@@ -11,20 +11,24 @@ $stmt = $conn->prepare("UPDATE product_variants SET size = ?, stock_quantity = ?
 $stmt->bind_param("sii", $size, $stock, $id);
 $stmt->execute();
 
-// Insert any new variants
-if (!empty($_POST['new_sizes']) && !empty($_POST['new_stocks'])) {
-    $new_sizes = $_POST['new_sizes'];
-    $new_stocks = $_POST['new_stocks'];
+// Insert any new variants added
+if (!empty($_POST['extra_sizes']) && !empty($_POST['extra_stocks'])) {
+    $extra_sizes = $_POST['extra_sizes'];
+    $extra_stocks = $_POST['extra_stocks'];
 
     $insert = $conn->prepare("INSERT INTO product_variants (product_id, size, stock_quantity) VALUES (?, ?, ?)");
 
-    for ($i = 0; $i < count($new_sizes); $i++) {
-        $s = $new_sizes[$i];
-        $q = $new_stocks[$i];
-        $insert->bind_param("isi", $product_id, $s, $q);
-        $insert->execute();
+    for ($i = 0; $i < count($extra_sizes); $i++) {
+        $size = $extra_sizes[$i];
+        $stock = $extra_stocks[$i];
+
+        if (!empty($size) && !empty($stock)) {
+            $insert->bind_param("isi", $product_id, $size, $stock);
+            $insert->execute();
+        }
     }
 }
 
 header("Location: manageProducts.php");
 exit;
+?>

@@ -14,7 +14,7 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
     <link rel="icon" href="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png">
 </head>
 <body>
-    <nav id="sidebar">
+<nav id="sidebar">
         <ul>
             <li>
                 <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt=""></span>
@@ -38,7 +38,7 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
             </li>
 
             <li class="<?=(basename($_SERVER['PHP_SELF']) == 'salesRecords.php') ? 'active' : ''; ?>">
-                <a href="/Neverlonely/admin/salesRecords.php">
+                <a href="/Neverlonely/admin/Sales.php">
                     <span class="material-icons">shopping_cart</span>
                     <span>Sales</span>
                 </a>
@@ -192,10 +192,10 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
                     </label>
 
                     <!-- Container for additional variants -->
-                    <div id="additional-variants-container"></div>
+                    <div id="extra-variants-container"></div>
                     <!-- Add another size button -->
-                    <div class="editModal-btns" style="display: flex;">
-                        <button type="button" onclick="addAnotherSize()" class="modal-addVariant-btn">Add Another Size</button>
+                    <div class="editModal-btns">
+                        <button type="button" onclick="addExtraVariant()" class="addSize-btn">Add Another Size</button>
                         <button type="submit" class="modal-editProduct-btn">Save Changes</button>
                     </div>
                 </form>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width='device-width', initial-scale=1.0">
     <title>Neverlonely</title>
 
     <!-- icons -->
@@ -14,8 +14,9 @@
     <link rel="stylesheet" href="/Neverlonely/Assets/css/sidebar.css">
 
 </head>
+
 <body>
-    <nav id="sidebar">
+<nav id="sidebar">
         <ul>
             <li>
                 <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt=""></span>
@@ -67,6 +68,10 @@
             </li>
         </ul>
     </nav>
+
+    <main>
+        
+    </main>
 
 
 
