@@ -49,7 +49,7 @@ window.onclick = function(event) {
     }
 };
 
-
+//FOR ADD PRODUCT ADDING VARIANT
 function addVariant() {
     const container = document.getElementById("variant-container");
 
@@ -66,6 +66,24 @@ function addVariant() {
     container.appendChild(group);
 }
 
+function addAnotherSize() {
+    const container = document.getElementById("additional-variants-container");
+
+    const group = document.createElement("div");
+    group.className = "variant-group";
+
+    group.innerHTML = `
+        <label>Size
+            <input type="text" name="new_sizes[]" placeholder="Size (e.g. M)" required>
+        </label>
+        <label>Stock
+            <input type="number" name="new_stocks[]" placeholder="Stock Quantity" required>
+        </label>
+    `;
+
+    container.appendChild(group);
+}
+
 function removeLastVariant() {
     const container = document.getElementById("variant-container");
     const groups = container.querySelectorAll(".variant-group");
@@ -75,4 +93,50 @@ function removeLastVariant() {
     } else {
         alert("You must have at least one size.");
     }
+}
+
+function openEditModal(variantId) {
+    const sizeText = document.querySelector(`#size-${variantId}`).innerText;
+    const stockText = document.querySelector(`#stock-${variantId}`).innerText;
+
+    // Remove ' pcs' from stock
+    const cleanStock = parseInt(stockText.replace(' pcs', ''));
+
+    document.getElementById('editVariantId').value = variantId;
+    document.getElementById('editSize').value = sizeText;
+    document.getElementById('editStock').value = cleanStock;
+
+    document.getElementById('editModal').style.display = 'block';
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+
+let deleteUrl = '';
+
+function showConfirmModal(url, message) {
+    deleteUrl = url;
+    document.getElementById('confirmText').textContent = message;
+    document.getElementById('confirmDeleteModal').style.display = 'block';
+}
+
+function closeConfirmModal() {
+    document.getElementById('confirmDeleteModal').style.display = 'none';
+    deleteUrl = '';
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+    if (deleteUrl) {
+        window.location.href = deleteUrl;
+    }
+});
+
+function openEditModal(variantId, size, stock, productId) {
+    document.getElementById("editVariantId").value = variantId;
+    document.getElementById("editSize").value = size;
+    document.getElementById("editStock").value = stock;
+    document.getElementById("editProductId").value = productId;
+    document.getElementById("editModal").style.display = "block";
 }

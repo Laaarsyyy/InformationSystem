@@ -155,7 +155,7 @@ body {
 }
 
 .btn {
-    width: 100%;
+    width: 25%;
     height: 45px;
     background: var(--text);
     border: none;
@@ -184,14 +184,11 @@ body {
 
 /* Admin Dash Contents ----- CARDS*/
 
-
-
+main {
+    padding: min(30px, 7%);
+}
 
 .container {
-    position: absolute;
-    width: 50%;
-    top: 10%;
-    left: 25%;
     margin-bottom: 20px;
     padding: min(3em, 15%);
 }
@@ -237,29 +234,19 @@ body {
     font-weight: bold;
 }
 
-.chart-container {
-    position: absolute;
-    top: 40%;
-    left: 25%;
-    width: 57%;
-}
+
 
 
 /* Manage Products Contents */
 
 .manage-products-container {
-    position: absolute;
-    width: 50%;
-    top: 8%;
-    left: 20%;
     margin-bottom: 20px;
     padding: min(3em, 15%);
 }
 
 .add-product-btn {
-    position: absolute;
-    top: 70%;
-    left: 7%;
+    position: relative;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -273,10 +260,7 @@ body {
 
 /*   ---------------Table */
 .products-table {
-    position: absolute;
-    top: 30%;
-    left: 20%;
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
     text-align: center;
 }
@@ -286,6 +270,7 @@ body {
     text-align: center;
     border-bottom: 1px solid var(--text);
 }
+
 .products-table td {
     padding: 12px;
 }
@@ -310,6 +295,7 @@ body {
 }
 
 .btn-edit {
+
     color: var(--text);
     background-color: var(--bg-color);
     border: 1px solid var(--text);
@@ -326,7 +312,7 @@ body {
 }
 
 
-/* Manage Products Contents -----MODAL */
+/* Manage Products Contents ----- ADD NEW PRODUCT MODAL */
 
 .modal {
     display: none;
@@ -360,6 +346,7 @@ form label {
     border-radius: 8px;
     position: relative;
     z-index: 1001;
+    overflow-y: auto;
 }
 
 .modal img {
@@ -405,29 +392,29 @@ form label {
 }
 
 .modal-addProduct-btn {
-    position: absolute;
-    top: 88%;
-    left: 78%;
-    width: 150px;
-    height: 40px;
-    background: var(--text);
-    border: none;
-    outline: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
+    margin-top: 65px;
+    left: 80%;
+    position: relative;
+    background-color: var(--text);
     color: var(--second-text);
-    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    width: 20%;
+    cursor: pointer;
 }
 
 input[type="file"] {
-    display: none;
+    position: absolute;
+    left: 195px;
+    z-index: 1000;
 }
 
 .inputProduct {
     width: 50%;
     display: flex;
     align-items: center;
+    z-index: 1010;
 }
 
 
@@ -446,5 +433,69 @@ input[type="file"] {
     user-select: none;
     cursor: pointer;
     border-radius: 3px;
+    z-index: 1010;
 }
+
+/* Manage Products Contents ----- EDIT VARIANT MODAL */
+
+.editModal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.editModal img {
+    position: absolute;
+    top: 5%;
+    width: 50%;
+    z-index: 100;
+    left: 25%;
+    opacity: .2;
+}
+
+.editModal-content {
+    background-color: var(--bg-color);
+    margin: 15% auto;
+    padding: 20px;
+    width: 20%;
+    height: 20%;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.editModal-content .close {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.modal-editProduct-btn {
+    left: 60%;
+    top: 120%;
+    height: 40px;
+    position: relative;
+    background-color: var(--text);
+    color: var(--second-text);
+    border-radius: 5px;
+    width: 40%;
+}
+
+#editProductForm input {
+    border: 1px solid var(--text); 
+    background-color: transparent;
+}
+
+.editModal-btns .modal-addVariant-btn {
+    position: relative;
+    background-color: transparent;
+}
+
+/* Manage Products Contents ----- Delete VARIANT MODAL */
 
