@@ -39,7 +39,7 @@
                 </a>
             </li>
 
-            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'salesRecords.php') ? 'active' : ''; ?>">
+            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'Sales.php') ? 'active' : ''; ?>">
                 <a href="/Neverlonely/admin/Sales.php">
                     <span class="material-icons">shopping_cart</span>
                     <span>Sales</span>
