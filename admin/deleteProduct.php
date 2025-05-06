@@ -9,6 +9,7 @@ if (isset($_GET['id'])) {
 
     // Then delete the product
     $conn->query("DELETE FROM products WHERE id = $product_id");
-
+    
+    header("Location: manageProducts.php");
     exit();
 }

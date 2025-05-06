@@ -7,6 +7,8 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neverlonely</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/Neverlonely/Assets/css/sidebar.css">
@@ -66,6 +68,10 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
             </li>
         </ul>
     </nav>
+    
+    <div class="bodyLogo">
+        <img src="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png" alt="">
+    </div>
 
     <main>
         <div class="manage-products-container">
@@ -92,8 +98,8 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
                     <div id="variant-container">
                         <div class="variant-group">
                             <label>Size and Stocks</label>
-                            <input type="text" name="sizes[]" placeholder="Size (e.g. S)" required style="border: 1px solid var(--text); background-color: transparent;">
-                            <input type="number" name="stocks[]" placeholder="Stock Quantity" required style="border: 1px solid var(--text); background-color: transparent;">
+                            <input type="text" name="sizes[]" placeholder="Size (e.g. S)" required class="slim-input">
+                            <input type="number" name="stocks[]" placeholder="Stock Quantity" required class="slim-input" style="margin-left: 10px;">
                             <button type="button" onclick="removeLastVariant()" class="removeSize-btn" style="display: none;">
                                 <span class="material-icons">cancel</span></button>
                         </div>
@@ -116,54 +122,58 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php
-                $products = $conn->query("SELECT * FROM products");
-                while ($product = $products->fetch_assoc()):
-                    $product_id = $product['id'];
-                    $variants = $conn->query("SELECT * FROM product_variants WHERE product_id = $product_id");
-                    $variant_count = $variants->num_rows;
-                    $first = true;
-                    $row_index = 0;
-                    while ($variant = $variants->fetch_assoc()):
-                        $row_index++;
-                ?>
-                <tr>
-                    <?php if ($first): ?>
-                        <td rowspan="<?= $variant_count ?>">
-                            <strong><?= htmlspecialchars($product['name']) ?></strong><br>
-                            <?php if (!empty($product['image'])): ?>
-                                <img src="<?= htmlspecialchars($product['image']) ?>" 
-                                    alt="<?= htmlspecialchars($product['name']) ?>" 
-                                    style="width: 200px; height: auto; margin-top: 5px;"><br>
-                            <?php endif; ?> 
-                            <button onclick="showConfirmModal('deleteProduct.php?id=<?= $product_id ?>', 'Delete this product and all its variants?')" class="btn btn-delete">Delete Product</button>
+                <tbody>
+                    <?php
+                    $products = $conn->query("SELECT * FROM products");
+                    while ($product = $products->fetch_assoc()):
+                        $product_id = $product['id'];
+                        $variants = $conn->query("SELECT * FROM product_variants WHERE product_id = $product_id");
+                        $variant_count = $variants->num_rows;
+                        $first = true;
+                        $row_index = 0;
+                        while ($variant = $variants->fetch_assoc()):
+                            $row_index++;
+                    ?>
+                    <tr>
+                        <?php if ($first): ?>
+                            <td rowspan="<?= $variant_count ?>">
+                                <strong><?= htmlspecialchars($product['name']) ?></strong><br>
+                                <?php if (!empty($product['image'])): ?>
+                                    <img src="<?= htmlspecialchars($product['image']) ?>" 
+                                        alt="<?= htmlspecialchars($product['name']) ?>" 
+                                        style="width: 200px; height: auto; margin-top: 5px;"><br>
+                                <?php endif; ?> 
+                                <button onclick="showConfirmModal('deleteProduct.php?id=<?= $product_id ?>', 'Delete this product and all its variants?')" class="btn btn-deleteProduct">Delete Product</button>
+                            </td>
+                            
+                        <?php $first = false; endif; ?>
+
+                        <td id="size-<?= $variant['id'] ?>"><?= htmlspecialchars($variant['size']) ?></td>
+                        <td id="stock-<?= $variant['id'] ?>"><?= $variant['stock_quantity'] ?> pcs</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="openEditModal(<?= $variant['id'] ?>, '<?= $variant['size'] ?>', <?= $variant['stock_quantity'] ?>, <?= $product['id'] ?>)">Edit</button>
+                            <button 
+    onclick="showConfirmModal('deleteVariant.php?id=<?= $variant['id'] ?>', '<?= htmlspecialchars($variant['size']) ?>')" 
+    class="btn btn-delete">
+    Delete
+</button>
                         </td>
-                        
-                    <?php $first = false; endif; ?>
+                    </tr>
 
-                    <td id="size-<?= $variant['id'] ?>"><?= htmlspecialchars($variant['size']) ?></td>
-                    <td id="stock-<?= $variant['id'] ?>"><?= $variant['stock_quantity'] ?> pcs</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="openEditModal(<?= $variant['id'] ?>, '<?= $variant['size'] ?>', <?= $variant['stock_quantity'] ?>, <?= $product['id'] ?>)">Edit</button>
-                        <button onclick="showConfirmModal('deleteVariant.php?id=<?= $variant['id'] ?>', 'Delete this size?')" class="btn btn-delete">Delete</button>
-                    </td>
-                </tr>
-
-                <?php 
-                    if ($row_index === $variant_count): ?>
-                        <tr>
-                            <td colspan="4" style="border-bottom: 2px solid #ccc;"></td>
-                        </tr>
-                <?php 
-                    endif;
-                endwhile; endwhile; ?>
-            </tbody>
-        </table>
+                    <?php 
+                        if ($row_index === $variant_count): ?>
+                            <tr>
+                                <td colspan="4" style="border-bottom: 2px solid #ccc;"></td>
+                            </tr>
+                    <?php 
+                        endif;
+                    endwhile; endwhile; ?>
+                </tbody>
+        </table>    
         
-            <!-- Delete Modal-->
+        <!-- Delete Modal-->
         <div id="confirmDeleteModal" class="modal">
-            <div class="modal-content">
+            <div class="deleteModal-content">
                 <p id="confirmText">Are you sure you want to delete?</p>
                 <div class="modal-actions">
                     <button id="confirmDeleteBtn" class="btn btn-delete">Yes, Delete</button>

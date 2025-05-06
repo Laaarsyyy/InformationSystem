@@ -1,10 +1,8 @@
+// CHART--------------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    // Get the CSS variables
     const rootStyles = getComputedStyle(document.documentElement);
-    const bgColor = rootStyles.getPropertyValue('--second-bg-color').trim(); // fill color
-    const borderColor = rootStyles.getPropertyValue('--text').trim(); // line color
-
-    // Initialize the chart
+    const bgColor = rootStyles.getPropertyValue('--second-bg-color').trim();
+    const borderColor = rootStyles.getPropertyValue('--text').trim(); 
     const ctx = document.getElementById('salesChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
@@ -32,12 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Modal
+// ADD PRODUCT MODAL -----------------------------------------------------------
 function openModal() {
     document.getElementById('productModal').style.display = 'block';
 }
 
- // Close Modal
+ // Close // ADD PRODUCT MODAL -------------------------------------------------------------------
     function closeModal() {
     document.getElementById('productModal').style.display = 'none';
     }
@@ -49,7 +47,7 @@ window.onclick = function(event) {
     }
 };
 
-//FOR ADD PRODUCT ADDING VARIANT
+//ADD PRODUCT ADDING VARIANT
 function addVariant() {
     const container = document.getElementById("variant-container");
 
@@ -58,8 +56,8 @@ function addVariant() {
 
     group.innerHTML = `
         <label>Size and Stocks</label>
-        <input type="text" name="sizes[]" placeholder="Size (e.g. M)" required>
-        <input type="number" name="stocks[]" placeholder="Stock Quantity" required>
+        <input type="text" class="slim-input" name="sizes[]" placeholder="Size (e.g. M)" required>
+        <input type="number" class="slim-input" name="stocks[]" placeholder="Stock Quantity" required>
         <button type="button" onclick="removeLastVariant()" class="removeSize-btn"><span class="material-icons">cancel</span></button>
     `;
 
@@ -116,10 +114,12 @@ function closeEditModal() {
 
 let deleteUrl = '';
 
-function showConfirmModal(url, message) {
-    deleteUrl = url;
-    document.getElementById('confirmText').textContent = message;
-    document.getElementById('confirmDeleteModal').style.display = 'block';
+function showConfirmModal(deleteUrl, variantSize) {
+    document.getElementById("confirmText").innerText = `Are you sure you want to delete size "${variantSize}"?`;
+    document.getElementById("confirmDeleteBtn").onclick = function () {
+        window.location.href = deleteUrl;
+    };
+    document.getElementById("confirmDeleteModal").style.display = "block";
 }
 
 function closeConfirmModal() {
@@ -141,3 +141,65 @@ function openEditModal(variantId, size, stock, productId) {
     document.getElementById('extra-variants-container').innerHTML = ''; // Clear previous inputs
     document.getElementById('editModal').style.display = 'block';
 }
+
+//-------------------------------------------TRANSACTION MODAL------------------------------------
+function openTransactionModal() {
+    document.getElementById("transactionModal").style.display = "flex";
+    updateAllSubtotals();
+}
+
+function closeTransactionModal() {
+    document.getElementById("transactionModal").style.display = "none";
+}
+
+function addTransactionItem() {
+    const container = document.getElementById("transaction-items");
+    const template = container.querySelector(".transaction-item-group").cloneNode(true);
+
+    template.querySelector("select").selectedIndex = 0;
+    template.querySelector("input").value = 1;
+    template.querySelector(".transaction-subtotal").textContent = "0.00";
+
+    container.appendChild(template);
+    updateAllSubtotals();
+}
+
+function removeTransactionItem(btn) {
+    const container = document.getElementById("transaction-items");
+    if (container.children.length > 1) {
+        btn.parentElement.remove();
+        updateAllSubtotals();
+    }
+}
+
+function updateSubtotal(el) {
+    const itemGroup = el.closest(".transaction-item-group");
+    const select = itemGroup.querySelector("select");
+    const quantity = parseInt(itemGroup.querySelector("input").value) || 0;
+    const price = parseFloat(select.selectedOptions[0].getAttribute("data-price")) || 0;
+
+    const subtotal = price * quantity;
+    itemGroup.querySelector(".transaction-subtotal").textContent = subtotal.toFixed(2);
+
+    updateTotal();
+}
+
+function updateAllSubtotals() {
+    document.querySelectorAll(".transaction-item-group").forEach(group => {
+        updateSubtotal(group.querySelector("input"));
+    });
+}
+
+function updateTotal() {
+    let total = 0;
+    document.querySelectorAll(".transaction-subtotal").forEach(span => {
+        total += parseFloat(span.textContent);
+    });
+    document.getElementById("transaction-total").textContent = total.toFixed(2);
+}
+
+function validateTransaction() {
+    updateAllSubtotals();
+    return true;
+}
+//---------------------------------------------------------------------------------------------------
