@@ -1,6 +1,8 @@
 -- Make sure you're using the correct database
 USE data;
 
+ALTER TABLE products ADD costing DECIMAL(10,2) NOT NULL DEFAULT 0.00,    
+
 -- USERS TABLE
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,7 +17,6 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    description TEXT,
     image VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

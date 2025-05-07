@@ -1,7 +1,6 @@
 <?php
 session_start();
-$conn = new mysqli("localhost", "root", "", "data");
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+require '../config.php';
 ?>
 
 <!DOCTYPE html>
@@ -94,6 +93,14 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
                         <label for="inputProduct-btn">
                         <span class="material-icons">upload</span>Upload Image</label>
                     </label>
+
+                    <div class="priceCosting">
+                        <label for="">Price</label>
+                        <input type="number" name="price" required style="border: 1px solid var(--text); background-color: transparent;">
+
+                        <label for="">Costing</label>
+                        <input type="number" name="costing" required style="border: 1px solid var(--text); background-color: transparent;">
+                    </div>
 
                     <div id="variant-container">
                         <div class="variant-group">

@@ -83,11 +83,11 @@
             <thead>
                 <tr>
                     <th>Order-ID</th>
+                    <th>Customer</th>
                     <th>Product</th>
                     <th>Size</th>
                     <th>Quantity</th>
                     <th>Total Amount</th>
-                    <th>Customer</th>
                     <th>Time</th>
                     <th>Action</th>
                 </tr>
@@ -95,11 +95,11 @@
             <tbody>
                 <tr>
                     <td>1</td>
+                    <td>Lars Anthony Listerio</td>
                     <td>Core Logo</td>
                     <td>XL</td>
                     <td>3</td>
                     <td>₱1740</td>
-                    <td>Lars Anthony Listerio</td>
                     <td>3:40pm</td>
                     <td>Delete</td>
                 </tr>
@@ -111,9 +111,9 @@
             <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
             <h2>Create Transaction</h2>
             <form action="saveTransaction.php" method="POST" onsubmit="return validateTransaction()">
-            <label>Customer Name:
-                <input type="text" name="customer_name" required>
-            </label>
+                <label style="border-bottom: 3px solid black;">Customer Name:
+                    <input type="text" name="customer_name" required>
+                </label>
 
             <div id="transaction-items">
                 <div class="transaction-item-group">
@@ -121,7 +121,7 @@
                     <select name="variant_ids[]" onchange="updateSubtotal(this)">
                         <?php
                             $variants = $conn->query("SELECT pv.id, p.name, pv.size, p.price FROM product_variants pv 
-                                                    JOIN products p ON pv.product_id = p.id");
+                            JOIN products p ON pv.product_id = p.id");
                             while ($v = $variants->fetch_assoc()):
                             ?>
                             <option value="<?= $v['id'] ?>" data-price="<?= $v['price'] ?>">
@@ -140,12 +140,13 @@
                 <button type="button" class="transaction-removeSize-btn" onclick="removeTransactionItem(this)">Remove</button>
                 </div>
             </div>
-
-            <button type="button" onclick="addTransactionItem()">Add Another Item</button>
-
-            <h3>Total: ₱<span id="transaction-total">0.00</span></h3>
-
-            <button type="submit">Submit Transaction</button>
+            <div class="transaction-footer">
+                <h3>Total: ₱<span id="transaction-total">0.00</span></h3>
+                <div class="transactionFooter-btns">
+                    <button class="transactionAddItem" type="button" onclick="addTransactionItem()">Add Another Item</button>
+                    <button class="transactionSubmit" type="submit">Submit Transaction</button>
+                </div>
+            </div>
             </form>
         </div>
 </div>

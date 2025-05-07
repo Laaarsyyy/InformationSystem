@@ -3,6 +3,8 @@ include '../config.php'; // adjust as needed
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $product_name = $_POST['product_name'];
+    $price = $_POST['price'];
+    $costing = $_POST['costing'];
     $sizes = $_POST['sizes'];
     $stocks = $_POST['stocks'];
 
@@ -28,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Insert product
-    $stmt = $conn->prepare("INSERT INTO products (name, image) VALUES (?, ?)");
-    $stmt->bind_param("ss", $product_name, $image_path);
+    $stmt = $conn->prepare("INSERT INTO products (name, price, costing, image) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sdds", $product_name, $price, $costing, $image_path);
     $stmt->execute();
     $product_id = $stmt->insert_id;
     $stmt->close();

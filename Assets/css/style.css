@@ -34,7 +34,7 @@ body {
 
 .bodyLogo {
     position: fixed;
-    top: 15%;
+    top: 25%;
     left: 35%;
     z-index: 100;
 }
@@ -253,7 +253,7 @@ main {
 /* Manage Products Contents */
 
 .manage-products-container {
-    color: red;
+    color: var(--text);
     width: 90%;
     display: flex;
     align-items: center;
@@ -424,6 +424,11 @@ form label {
     cursor: pointer;
 }
 
+
+.priceCosting input {
+    background-color: transparent;
+}
+
 input[type="file"] {
     position: absolute;
     left: 195px;
@@ -569,6 +574,12 @@ input[type="file"] {
     color: var(--second-text);
 }
 
+#transaction-items {
+    max-height: 300px; /* or any height you prefer */
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
 .transaction-modal {
     display: none;
     position: fixed;
@@ -581,6 +592,9 @@ input[type="file"] {
     background-color: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .transaction-modal-content {
@@ -606,7 +620,7 @@ input[type="file"] {
 
 .transaction-modal-content input,
 .transaction-modal-content select {
-    width: 100%;
+    width: 90%;
     padding: 8px 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -615,22 +629,18 @@ input[type="file"] {
 
 .transaction-item-group {
     margin-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
+    border-bottom: 1px dashed var(--text);
     padding-bottom: 10px;
 }
 
 .transaction-removeSize-btn {
-    background-color: #e74c3c;
-    color: white;
+    background-color: var(--text);
+    color: var(--second-text);
     border: none;
     padding: 5px 10px;
     margin-top: 5px;
     cursor: pointer;
     border-radius: 4px;
-}
-
-.transaction-removeSize-btn:hover {
-    background-color: #c0392b;
 }
 
 .transaction-close {
@@ -640,4 +650,25 @@ input[type="file"] {
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+}
+
+.transaction-footer {
+    padding-top: 10px;
+    border-top: 3px solid var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.transactionAddItem {
+    border-radius: 7px;
+    padding: 5px;
+    background-color: transparent;
+}
+
+.transactionSubmit {
+    border-radius: 7px;
+    padding: 5px;
+    background-color: var(--text);
+    color: var(--second-text);
 }
