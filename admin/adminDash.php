@@ -75,6 +75,10 @@
         </ul>
     </nav>
 
+    <div class="bodyLogo">
+        <img src="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png" alt="">
+    </div>
+
     <main>
             <!-- Cards -->
         <div class="container">

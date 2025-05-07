@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="/Neverlonely/Assets/css/style.css">
 
     <!-- js -->
-    <script src="/Neverlonely/Assets/javascript/sidebar.js"></script>
     <script src="/Neverlonely/Assets/javascript/script.js"></script>
 </head>
 <body>
@@ -74,6 +73,10 @@
         </ul>
     </nav>
 
+    <div class="bodyLogo">
+        <img src="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png" alt="">
+    </div>
+
     <main>
         <div class="manage-products-container">
             <h1>Sales Records</h1>
@@ -93,63 +96,103 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Lars Anthony Listerio</td>
-                    <td>Core Logo</td>
-                    <td>XL</td>
-                    <td>3</td>
-                    <td>₱1740</td>
-                    <td>3:40pm</td>
-                    <td>Delete</td>
-                </tr>
+                <?php
+                    $query = "
+                        SELECT
+                            o.id AS order_id,
+                            o.customer_name,
+                            p.name AS product_name,
+                            pv.size,
+                            oi.quantity,
+                            (p.price * oi.quantity) AS total_amount,
+                            o.order_date AS created_at,
+                            oi.id AS order_item_id
+                        FROM order_items oi
+                        JOIN orders o ON oi.order_id = o.id
+                        JOIN product_variants pv ON oi.variant_id = pv.id
+                        JOIN products p ON pv.product_id = p.id
+                    ";
+                    $result = $conn->query($query);
+                    if ($result->num_rows > 0):
+                        while ($row = $result->fetch_assoc()):
+                    ?>
+                    <tr style="border-bottom: 1px solid black; padding-top: 50px;">
+                        <td><?= htmlspecialchars($row['order_id']) ?></td>
+                        <td><?= htmlspecialchars($row['customer_name']) ?></td>
+                        <td><?= htmlspecialchars($row['product_name']) ?></td>
+                        <td><?= htmlspecialchars($row['size']) ?></td>
+                        <td><?= htmlspecialchars($row['quantity']) ?></td>
+                        <td>₱<?= number_format($row['total_amount'], 2) ?></td>
+                        <td><?= date("Y-m-d h:i A", strtotime($row['created_at'])) ?></td>
+                        <td><button class="transactionDelete-btn" data-id="<?= $row['order_id'] ?>">Delete</button></td>
+                    </tr>
+                    <?php
+                        endwhile;
+                    else:
+                    ?>
+                    <tr><td colspan="8">No transactions yet.</td></tr>
+                    <?php endif; ?>
             </tbody>
         </table>
         <!-- --------------------------------TRANSACTION MODAL-------------------------------- -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
-        <div class="transaction-modal-content">
-            <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
-            <h2>Create Transaction</h2>
-            <form action="saveTransaction.php" method="POST" onsubmit="return validateTransaction()">
-                <label style="border-bottom: 3px solid black;">Customer Name:
-                    <input type="text" name="customer_name" required>
-                </label>
+            <div class="transaction-modal-content">
+                <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
+                <h2>Create Transaction</h2>
+                <form action="saveTransaction.php" method="POST" onsubmit="return validateTransaction()">
+                    <label style="border-bottom: 3px solid black;">Customer Name:
+                        <input type="text" name="customer_name" required>
+                    </label>
 
-            <div id="transaction-items">
-                <div class="transaction-item-group">
-                <label>Product Variant:
-                    <select name="variant_ids[]" onchange="updateSubtotal(this)">
-                        <?php
-                            $variants = $conn->query("SELECT pv.id, p.name, pv.size, p.price FROM product_variants pv 
-                            JOIN products p ON pv.product_id = p.id");
-                            while ($v = $variants->fetch_assoc()):
-                            ?>
-                            <option value="<?= $v['id'] ?>" data-price="<?= $v['price'] ?>">
-                                <?= $v['name'] ?> (<?= $v['size'] ?>) - ₱<?= $v['price'] ?>
-                            </option>
-                        <?php endwhile; ?>
-                    </select>
-                </label>
+                <div id="transaction-items">
+                    <div class="transaction-item-group">
+                    <label>Product Variant:
+                        <select name="variant_ids[]" onchange="updateSubtotal(this)">
+                            <?php
+                                $variants = $conn->query("SELECT pv.id, p.name, pv.size, p.price FROM product_variants pv 
+                                JOIN products p ON pv.product_id = p.id");
+                                while ($v = $variants->fetch_assoc()):
+                                ?>
+                                <option value="<?= $v['id'] ?>" data-price="<?= $v['price'] ?>">
+                                    <?= $v['name'] ?> (<?= $v['size'] ?>) - ₱<?= $v['price'] ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </label>
 
-                <label>Quantity:
-                    <input type="number" name="quantities[]" min="1" value="1" oninput="updateSubtotal(this)" required>
-                </label>
+                    <label>Quantity:
+                        <input type="number" name="quantities[]" min="1" value="1" oninput="updateSubtotal(this)" required>
+                    </label>
 
-                <p class="transaction-subtotal-text">Subtotal: ₱<span class="transaction-subtotal">0.00</span></p>
+                    <p class="transaction-subtotal-text">Subtotal: ₱<span class="transaction-subtotal">0.00</span></p>
 
-                <button type="button" class="transaction-removeSize-btn" onclick="removeTransactionItem(this)">Remove</button>
+                    <button type="button" class="transaction-removeSize-btn" onclick="removeTransactionItem(this)">Remove</button>
+                    </div>
                 </div>
-            </div>
-            <div class="transaction-footer">
-                <h3>Total: ₱<span id="transaction-total">0.00</span></h3>
-                <div class="transactionFooter-btns">
-                    <button class="transactionAddItem" type="button" onclick="addTransactionItem()">Add Another Item</button>
-                    <button class="transactionSubmit" type="submit">Submit Transaction</button>
+                <div class="transaction-footer">
+                    <h3>Total: ₱<span id="transaction-total">0.00</span></h3>
+                    <div class="transactionFooter-btns">
+                        <button class="transactionAddItem" type="button" onclick="addTransactionItem()">Add Another Item</button>
+                        <button class="transactionSubmit" type="submit">Submit Transaction</button>
+                    </div>
                 </div>
+                </form>
             </div>
-            </form>
         </div>
-</div>
     </main> 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.getElementById('toggle-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    if (toggleButton && sidebar) {
+        toggleButton.addEventListener('click', function () {
+            sidebar.classList.toggle('close');
+            toggleButton.classList.toggle('rotate');
+        });
+    }
+});
+    </script>
+    <script src="/Neverlonely/Assets/javascript/script.js"></script>
 </body>
 </html>

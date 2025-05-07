@@ -672,3 +672,13 @@ input[type="file"] {
     background-color: var(--text);
     color: var(--second-text);
 }
+
+.transactionDelete-btn {
+    background-color: var(--text);
+    color: var(--second-text);
+    border: none;
+    padding: 5px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}

@@ -1,7 +1,11 @@
-const toggleButton = document.getElementById('toggle-btn');
-const sidebar = document.getElementById('sidebar');
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.getElementById('toggle-btn');
+    const sidebar = document.getElementById('sidebar');
 
-function toggleSidebar(){
-    sidebar.classList.toggle('close');
-    toggleButton.classList.toggle('rotate');
-}
+    if (toggleButton && sidebar) {
+        toggleButton.addEventListener('click', function () {
+            sidebar.classList.toggle('close');
+            toggleButton.classList.toggle('rotate');
+        });
+    }
+});
