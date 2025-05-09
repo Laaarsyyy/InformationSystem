@@ -97,42 +97,86 @@
             </thead>
             <tbody>
                 <?php
-                    $query = "
-                        SELECT
-                            o.id AS order_id,
-                            o.customer_name,
-                            p.name AS product_name,
-                            pv.size,
-                            oi.quantity,
-                            (p.price * oi.quantity) AS total_amount,
-                            o.order_date AS created_at,
-                            oi.id AS order_item_id
-                        FROM order_items oi
-                        JOIN orders o ON oi.order_id = o.id
-                        JOIN product_variants pv ON oi.variant_id = pv.id
-                        JOIN products p ON pv.product_id = p.id
-                    ";
-                    $result = $conn->query($query);
-                    if ($result->num_rows > 0):
-                        while ($row = $result->fetch_assoc()):
-                    ?>
-                    <tr style="border-bottom: 1px solid black; padding-top: 50px;">
-                        <td><?= htmlspecialchars($row['order_id']) ?></td>
-                        <td><?= htmlspecialchars($row['customer_name']) ?></td>
-                        <td><?= htmlspecialchars($row['product_name']) ?></td>
-                        <td><?= htmlspecialchars($row['size']) ?></td>
-                        <td><?= htmlspecialchars($row['quantity']) ?></td>
-                        <td>₱<?= number_format($row['total_amount'], 2) ?></td>
-                        <td><?= date("Y-m-d h:i A", strtotime($row['created_at'])) ?></td>
-                        <td><button class="transactionDelete-btn" data-id="<?= $row['order_id'] ?>">Delete</button></td>
-                    </tr>
-                    <?php
-                        endwhile;
-                    else:
-                    ?>
-                    <tr><td colspan="8">No transactions yet.</td></tr>
-                    <?php endif; ?>
-            </tbody>
+                $sql = "
+                    SELECT 
+                        o.id AS order_id,
+                        o.customer_name,
+                        o.order_date,
+                        p.name AS product_name,
+                        pv.size,
+                        oi.quantity,
+                        p.price,
+                        (p.price * oi.quantity) AS item_total
+                    FROM orders o
+                    JOIN order_items oi ON o.id = oi.order_id
+                    JOIN product_variants pv ON oi.variant_id = pv.id
+                    JOIN products p ON pv.product_id = p.id
+                    ORDER BY o.order_date DESC
+                ";
+
+                $result = $conn->query($sql);
+
+                $currentOrderId = null;
+                $orderRowCounts = [];
+
+                if ($result->num_rows > 0) {
+                    $rows = $result->fetch_all(MYSQLI_ASSOC);
+
+                    foreach ($rows as $row) {
+                        $orderRowCounts[$row['order_id']] = isset($orderRowCounts[$row['order_id']]) 
+                            ? $orderRowCounts[$row['order_id']] + 1 
+                            : 1;
+                    }
+
+                    $printedOrderIds = [];
+                    $orderPrintedCount = [];
+
+                    foreach ($rows as $row) {
+                        $order_id = $row['order_id'];
+
+                        // Track how many rows printed for this order
+                        if (!isset($orderPrintedCount[$order_id])) {
+                            $orderPrintedCount[$order_id] = 1;
+                        } else {
+                            $orderPrintedCount[$order_id]++;
+                        }
+
+                        // Check if this is the last row for the current order
+                        $isLastRowOfOrder = $orderPrintedCount[$order_id] === $orderRowCounts[$order_id];
+                        ?>
+                        <tr style="<?= $isLastRowOfOrder ? 'border-bottom: 2px solid black;' : '' ?>">
+                            <?php if (!in_array($order_id, $printedOrderIds)) { ?>
+                                <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= htmlspecialchars($order_id) ?></td>
+                                <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= htmlspecialchars($row['customer_name']) ?></td>
+                            <?php } ?>
+
+                            <td><?= htmlspecialchars($row['product_name']) ?></td>
+                            <td><?= htmlspecialchars($row['size']) ?></td>
+                            <td><?= htmlspecialchars($row['quantity']) ?></td>
+
+                            <?php if (!in_array($order_id, $printedOrderIds)) { ?>
+                                <td rowspan="<?= $orderRowCounts[$order_id] ?>">
+                                    ₱<?= number_format(array_sum(array_column(
+                                        array_filter($rows, fn($r) => $r['order_id'] === $order_id), 
+                                        'item_total'
+                                    )), 2) ?>
+                                </td>
+                                <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= date("Y-m-d h:i A", strtotime($row['order_date'])) ?></td>
+                                <td rowspan="<?= $orderRowCounts[$order_id] ?>">
+                                    <button class="transactionDelete-btn" data-id="<?= $order_id ?>">Delete</button>
+                                </td>
+                            <?php } ?>
+                        </tr>
+                        <?php
+                        $printedOrderIds[] = $order_id;
+                    }
+
+                } else {
+                    echo '<tr><td colspan="8">No transactions yet.</td></tr>';
+                }
+                ?>
+
+        </tbody>
         </table>
         <!-- --------------------------------TRANSACTION MODAL-------------------------------- -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
@@ -140,7 +184,7 @@
                 <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
                 <h2>Create Transaction</h2>
                 <form action="saveTransaction.php" method="POST" onsubmit="return validateTransaction()">
-                    <label style="border-bottom: 3px solid black;">Customer Name:
+                    <label>Customer Name:
                         <input type="text" name="customer_name" required>
                     </label>
 
@@ -149,14 +193,27 @@
                     <label>Product Variant:
                         <select name="variant_ids[]" onchange="updateSubtotal(this)">
                             <?php
-                                $variants = $conn->query("SELECT pv.id, p.name, pv.size, p.price FROM product_variants pv 
-                                JOIN products p ON pv.product_id = p.id");
-                                while ($v = $variants->fetch_assoc()):
-                                ?>
+                            // Fetch variants with stock info
+                            $variants = $conn->query("
+                                SELECT pv.id, p.name, pv.size, p.price, pv.stock_quantity 
+                                FROM product_variants pv 
+                                JOIN products p ON pv.product_id = p.id
+                            ");
+
+                            while ($v = $variants->fetch_assoc()):
+                                if ($v['stock_quantity'] > 0):
+                            ?>
                                 <option value="<?= $v['id'] ?>" data-price="<?= $v['price'] ?>">
-                                    <?= $v['name'] ?> (<?= $v['size'] ?>) - ₱<?= $v['price'] ?>
+                                    <?= htmlspecialchars($v['name']) ?> (<?= htmlspecialchars($v['size']) ?>) - ₱<?= number_format($v['price'], 2) ?>
                                 </option>
-                            <?php endwhile; ?>
+                            <?php else: ?>
+                                <option disabled>
+                                    <?= htmlspecialchars($v['name']) ?> (<?= htmlspecialchars($v['size']) ?>) - Out of Stock
+                                </option>
+                            <?php 
+                                endif;
+                            endwhile; 
+                            ?>
                         </select>
                     </label>
 

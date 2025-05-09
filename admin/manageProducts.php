@@ -156,7 +156,9 @@ require '../config.php';
                         <?php $first = false; endif; ?>
 
                         <td id="size-<?= $variant['id'] ?>"><?= htmlspecialchars($variant['size']) ?></td>
-                        <td id="stock-<?= $variant['id'] ?>"><?= $variant['stock_quantity'] ?> pcs</td>
+                        <td id="stock-<?= $variant['id'] ?>" style="<?= $variant['stock_quantity'] == 0 ? 'color: red;' : '' ?>">
+                                <?= $variant['stock_quantity'] == 0 ? 'Out of Stock' : $variant['stock_quantity'] . ' pcs' ?>
+                        </td>
                         <td>
                             <button class="btn btn-edit" onclick="openEditModal(<?= $variant['id'] ?>, '<?= $variant['size'] ?>', <?= $variant['stock_quantity'] ?>, <?= $product['id'] ?>)">Edit</button>
                             <button 

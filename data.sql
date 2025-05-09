@@ -1,5 +1,6 @@
 -- Make sure you're using the correct database
-USE data;   
+USE data;
+
 
 -- USERS TABLE
 CREATE TABLE users (
@@ -45,5 +46,3 @@ CREATE TABLE order_items (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (variant_id) REFERENCES product_variants(id)
 );
-
-

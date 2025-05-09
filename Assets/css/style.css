@@ -412,7 +412,7 @@ form label {
 }
 
 .modal-addProduct-btn {
-    margin-top: 65px;
+    margin-top: 40px;
     left: 80%;
     position: relative;
     background-color: var(--text);
