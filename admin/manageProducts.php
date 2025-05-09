@@ -161,11 +161,8 @@ require '../config.php';
                         </td>
                         <td>
                             <button class="btn btn-edit" onclick="openEditModal(<?= $variant['id'] ?>, '<?= $variant['size'] ?>', <?= $variant['stock_quantity'] ?>, <?= $product['id'] ?>)">Edit</button>
-                            <button 
-    onclick="showConfirmModal('deleteVariant.php?id=<?= $variant['id'] ?>', '<?= htmlspecialchars($variant['size']) ?>')" 
-    class="btn btn-delete">
-    Delete
-</button>
+                            <button onclick="showConfirmModal('deleteVariant.php?id=<?= $variant['id'] ?>', '<?= htmlspecialchars($variant['size']) ?>')" 
+                                class="btn btn-delete">Delete</button>
                         </td>
                     </tr>
 
