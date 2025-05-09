@@ -17,7 +17,6 @@ if (!empty($_POST['extra_sizes']) && !empty($_POST['extra_stocks'])) {
     $extra_stocks = $_POST['extra_stocks'];
 
     $insert = $conn->prepare("INSERT INTO product_variants (product_id, size, stock_quantity) VALUES (?, ?, ?)");
-
     for ($i = 0; $i < count($extra_sizes); $i++) {
         $size = $extra_sizes[$i];
         $stock = $extra_stocks[$i];

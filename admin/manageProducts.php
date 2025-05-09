@@ -15,7 +15,7 @@ require '../config.php';
     <link rel="icon" href="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png">
 </head>
 <body>
-<nav id="sidebar">
+    <nav id="sidebar">
         <ul>
             <li>
                 <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt=""></span>
@@ -67,7 +67,7 @@ require '../config.php';
             </li>
         </ul>
     </nav>
-    
+
     <div class="bodyLogo">
         <img src="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png" alt="">
     </div>

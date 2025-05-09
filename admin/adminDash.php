@@ -114,6 +114,32 @@
                 <canvas id="salesChart"></canvas>
             </div>
         </div>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const rangeSelector = document.getElementById("sales-range");
+
+            function fetchDashboardData() {
+                const range = rangeSelector.value;
+
+                fetch(`dashData.php?range=${range}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("sales-count").textContent = `${data.sales} Sales`;
+                        document.getElementById("revenue").textContent = `₱${parseFloat(data.revenue).toFixed(2)}`;
+                        document.getElementById("top-product").textContent = data.top_product || "None";
+                    })
+                    .catch(error => {
+                        console.error("Error loading dashboard data:", error);
+                    });
+            }
+
+            // Fetch when the page loads
+            fetchDashboardData();
+
+            // Fetch when the filter changes
+            rangeSelector.addEventListener("change", fetchDashboardData);
+        });
+        </script>
         <script src="/Neverlonely/Assets/javascript/sidebar.js"></script>
     </main>
 
