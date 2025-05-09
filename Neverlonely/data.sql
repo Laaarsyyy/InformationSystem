@@ -1,7 +1,5 @@
 -- Make sure you're using the correct database
-USE data;
-
-ALTER TABLE products ADD costing DECIMAL(10,2) NOT NULL DEFAULT 0.00,    
+USE data;   
 
 -- USERS TABLE
 CREATE TABLE users (
@@ -17,6 +15,7 @@ CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
+    costing DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     image VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -46,3 +45,5 @@ CREATE TABLE order_items (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (variant_id) REFERENCES product_variants(id)
 );
+
+
