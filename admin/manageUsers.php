@@ -112,5 +112,48 @@
             </tbody>
         </table>
     </main>
+    
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddUserModal()">&times;</span>
+        <h2>Add New User</h2>
+        <form action="addUser.php" method="POST">
+            <label>Username:
+                <input type="text" name="username" required>
+            </label>
+            <label>Password:
+                <input type="password" name="password" required>
+            </label>
+            <label>Role:
+                <select name="role" required>
+                    <option value="staff">Staff</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </label>
+            <button type="submit">Add User</button>
+        </form>
+    </div>
+    </div>
+
+    <!-- Add User Modal JS -->
+    <script>
+    const addUserModal = document.getElementById('addUserModal');
+    const addUserBtn = document.querySelector('.createTransac-btn');
+
+    addUserBtn.addEventListener('click', () => {
+        addUserModal.style.display = 'block';
+    });
+
+    function closeAddUserModal() {
+        addUserModal.style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+        if (event.target == addUserModal) {
+            closeAddUserModal();
+        }
+    }
+    </script>
 </body>
 </html>
