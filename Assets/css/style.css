@@ -682,3 +682,25 @@ input[type="file"] {
     cursor: pointer;
     border-radius: 4px;
 }
+
+.line {
+    border-bottom: 1px solid var(--text);
+}
+
+.addUserModal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 25%;
+    height: 25%;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.addUserbtn {
+    background-color: var(--text);
+    color: var(--second-text);
+    border-radius: 5px;
+}

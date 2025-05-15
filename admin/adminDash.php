@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +76,7 @@
             </li>
 
             <li>
-                <a href="/Neverlonely/logout.php">
+                <a onclick="openLogoutModal()">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
@@ -108,12 +117,24 @@
                     <p id="top-product">None</p>
                 </div>
             </div>
+            <!-- Logout Confirmation Modal-->
+        <div id="logoutModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Confirm Logout</h3>
+                <p>Are you sure you want to log out?</p>
+                <div style="margin-top: 15px;">
+                <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                <button onclick="closeLogoutModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
 
                     <!-- Charts -->
             <div class="chart-container">
                 <canvas id="salesChart"></canvas>
             </div>
         </div>
+
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             const rangeSelector = document.getElementById("sales-range");
@@ -140,8 +161,25 @@
             rangeSelector.addEventListener("change", fetchDashboardData);
         });
         </script>
+
+
+
+        <!--Logout Confirmation Modal JS -->
+        <script>
+            function openLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'block';
+            }
+
+            function closeLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'none';
+            }
+
+            function confirmLogout() {
+            window.location.href = '../logout.php'; // Adjust path if needed
+            }
+        </script>
         <script src="/Neverlonely/Assets/javascript/sidebar.js"></script>
     </main>
-
+    
 </body>
 </html>

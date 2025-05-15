@@ -1,29 +1,57 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit;
+}
+?>
+
+<?php include '../config.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width='device-width', initial-scale=1.0">
+    <title>Neverlonely</title>
+
+    <!-- icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="icon" href="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png">
+
+    <!-- css -->
+    <link rel="stylesheet" href="/Neverlonely/Assets/css/sidebar.css">
+    <link rel="stylesheet" href="/Neverlonely/Assets/css/style.css">
+
+    <!-- js -->
+    <script src="/Neverlonely/Assets/javascript/script.js"></script>
 </head>
 <body>
     <nav id="sidebar">
         <ul>
+            <li>
+                <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt=""></span>
+                <button onclick=toggleSidebar() id="toggle-btn">
+                    <span class="material-icons">keyboard_double_arrow_right</span>
+                </button>
+            </li>
+
             <li class="<?=(basename($_SERVER['PHP_SELF']) == 'Sales.php') ? 'active' : ''; ?>">
-                <a href="/Neverlonely/admin/Sales.php">
+                <a href="/Neverlonely/staff/staffSales.php">
                     <span class="material-icons">shopping_cart</span>
                     <span>Sales</span>
                 </a>
             </li>
 
             <li>
-                <a href="/Neverlonely/logout.php">
+                <a onclick="openLogoutModal()">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
             </li>
         </ul>
     </nav>
-
 
     <div class="bodyLogo">
         <img src="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png" alt="">
@@ -86,14 +114,14 @@
                     foreach ($rows as $row) {
                         $order_id = $row['order_id'];
 
-                        // Track how many rows printed for this order
+                        // taga check kung ilang row meron
                         if (!isset($orderPrintedCount[$order_id])) {
                             $orderPrintedCount[$order_id] = 1;
                         } else {
                             $orderPrintedCount[$order_id]++;
                         }
 
-                        // Check if this is the last row for the current order
+                        // ichechecck if eto na yung last row 
                         $isLastRowOfOrder = $orderPrintedCount[$order_id] === $orderRowCounts[$order_id];
                         ?>
                         <tr style="<?= $isLastRowOfOrder ? 'border-bottom: 2px solid black;' : '' ?>">
@@ -130,7 +158,7 @@
 
         </tbody>
         </table>
-        <!-- -------------TRANSACTION MODAL-------------------------------- -->
+        <!-- ----------TRANSACTION MODAL------------------ -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
             <div class="transaction-modal-content">
                 <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
@@ -188,7 +216,21 @@
                 </form>
             </div>
         </div>
+
+        <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out?</p>
+            <div style="margin-top: 15px;">
+            <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+            <button onclick="closeLogoutModal()">Cancel</button>
+            </div>
+        </div>
+        </div>
+
     </main> 
+
+        <!--Sidebar JS (di nagana pag nasa js file) -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
     const toggleButton = document.getElementById('toggle-btn');
@@ -201,6 +243,37 @@
         });
     }
 });
+    </script>
+
+        <!--Logout Confirmation Modal JS -->
+    <script>
+        function openLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'block';
+        }
+
+        function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        function confirmLogout() {
+        window.location.href = '../logout.php'; // Adjust path if needed
+        }
+    </script>
+
+
+    <!--Staff Sales Logout Modal -->
+    <script>
+        function openLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'block';
+        }
+
+        function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        function confirmLogout() {
+        window.location.href = '../logout.php'; // Adjust path if needed
+        }
     </script>
     <script src="/Neverlonely/Assets/javascript/script.js"></script>
 </body>

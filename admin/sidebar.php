@@ -63,6 +63,7 @@
                 <a href="/Neverlonely/logout.php">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
+                    <popover></popover>
                 </a>
             </li>
         </ul>

@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit;
+}
+?>
+
 <?php include '../config.php'; ?>
 
 <!DOCTYPE html>
@@ -6,6 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width='device-width', initial-scale=1.0">
     <title>Neverlonely</title>
+
 
     <!-- icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -65,7 +74,7 @@
             </li>
 
             <li>
-                <a href="/Neverlonely/logout.php">
+                <a onclick="openLogoutModal()">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
@@ -134,14 +143,14 @@
                     foreach ($rows as $row) {
                         $order_id = $row['order_id'];
 
-                        // Track how many rows printed for this order
+                        // taga check kung ilang row meron
                         if (!isset($orderPrintedCount[$order_id])) {
                             $orderPrintedCount[$order_id] = 1;
                         } else {
                             $orderPrintedCount[$order_id]++;
                         }
 
-                        // Check if this is the last row for the current order
+                        // ichechecck if eto na yung last row 
                         $isLastRowOfOrder = $orderPrintedCount[$order_id] === $orderRowCounts[$order_id];
                         ?>
                         <tr style="<?= $isLastRowOfOrder ? 'border-bottom: 2px solid black;' : '' ?>">
@@ -178,7 +187,7 @@
 
         </tbody>
         </table>
-        <!-- --------------------------------TRANSACTION MODAL-------------------------------- -->
+        <!-- ----------TRANSACTION MODAL------------------ -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
             <div class="transaction-modal-content">
                 <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
@@ -236,7 +245,22 @@
                 </form>
             </div>
         </div>
+
+                        <!-- Logout Modal-->
+        <div id="logoutModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Confirm Logout</h3>
+                <p>Are you sure you want to log out?</p>
+                <div style="margin-top: 15px;">
+                <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                <button onclick="closeLogoutModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
     </main> 
+
+        <!--Sidebar JS (di nagana pag nasa js file) -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
     const toggleButton = document.getElementById('toggle-btn');

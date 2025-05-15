@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($user['role'] == 'admin') {
                 header("Location: admin/adminDash.php");
             } else {
-                header("Location: staffDash.php");
+                header("Location: staff/staffSales.php");
             }
             exit();
         } else {
