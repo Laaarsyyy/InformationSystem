@@ -22,7 +22,7 @@ if (!isset($_SESSION['user_id'])) {
     <nav id="sidebar">
         <ul>
             <li>
-                <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black" alt=""></span>
+                <span class="logo"><img src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt=""></span>
                 <button onclick=toggleSidebar() id="toggle-btn">
                     <span class="material-icons">keyboard_double_arrow_right</span>
                 </button>

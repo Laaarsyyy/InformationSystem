@@ -3,31 +3,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const rootStyles = getComputedStyle(document.documentElement);
     const bgColor = rootStyles.getPropertyValue('--second-bg-color').trim();
     const borderColor = rootStyles.getPropertyValue('--text').trim(); 
+
     const ctx = document.getElementById('salesChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-                label: "Sales",
-                data: [34, 18, 35, 40],
-                color: borderColor,
-                borderColor: borderColor,
-                backgroundColor: bgColor,
-                borderWidth: 2,
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+
+    fetch('/Neverlonely/admin/getChartData.php')
+        .then(response => response.json())
+        .then(data => {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{
+                        label: "Sales",
+                        data: data,
+                        color: borderColor,
+                        borderColor: borderColor,
+                        backgroundColor: bgColor,
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
-            }
-        }
-    });
+            });
+        })
+        .catch(error => console.error('Chart fetch error:', error));
 });
 
 // ADD PRODUCT MODAL -----------------------------------------------------------
