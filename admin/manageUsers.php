@@ -49,7 +49,7 @@ if (!isset($_SESSION['user_id'])) {
                 </a>
             </li>
 
-            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'Sales.php') ? 'active' : ''; ?>">
+            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'salesRecords.php') ? 'active' : ''; ?>">
                 <a href="/Neverlonely/admin/Sales.php">
                     <span class="material-icons">shopping_cart</span>
                     <span>Sales</span>
@@ -70,8 +70,16 @@ if (!isset($_SESSION['user_id'])) {
                 </a>
             </li>
 
+            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'archives.php') ? 'active' : ''; ?>">
+                <a href="/Neverlonely/admin/archives.php">
+            <span class="material-icons">archive
+            </span>
+                    <span>Archive</span>
+                </a>
+            </li>
+
             <li>
-                <a onclick="openLogoutModal()" style="cursor: pointer;">
+                <a onclick="openLogoutModal()">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>

@@ -1,12 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../index.php");
-    exit;
-}
-require '../config.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,11 +5,18 @@ require '../config.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neverlonely</title>
 
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png">
+
+    <!-- icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+    <!-- css -->
     <link rel="stylesheet" href="/Neverlonely/Assets/css/sidebar.css">
     <link rel="stylesheet" href="/Neverlonely/Assets/css/style.css">
-    <link rel="icon" href="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png">
-    
+
+    <!-- js -->
+    <script src="/Neverlonely/Assets/javascript/script.js"></script>
+
 </head>
 <body>
     <nav id="sidebar">
@@ -82,86 +80,30 @@ require '../config.php';
         </ul>
     </nav>
 
-    <div class="bodyLogo">
-        <img src="/Neverlonely/Assets/never lonely RAGER FIEND LOGO ICON.png" alt="">
-    </div>
-
     <main>
         <div class="manage-products-container">
-            <h1>Records</h1>
+            <h1>Sales Records</h1>
+            <button onclick="openTransactionModal()" class="createTransac-btn">Create Transaction</button>
         </div>
+
 
         <table class="products-table">
             <thead>
                 <tr>
-                    <th>Month</th>
-                    <th>Total Orders</th>
-                    <th>Total Quantity Sold</th>
-                    <th>Total Revenue</th>
-                    <th>Profit</th>
+                    <th>Order-ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Total Amount</th>
+                    <th>Time</th>
                 </tr>
             </thead>
-
             <tbody>
-                <?php
-            $sql = "
-                SELECT 
-                    DATE_FORMAT(o.order_date, '%Y-%m') AS month,
-                    COUNT(DISTINCT o.id) AS total_orders,
-                    SUM(oi.quantity) AS total_items_sold,
-                    SUM(p.price * oi.quantity) AS total_revenue,
-                    SUM(p.costing * oi.quantity) AS total_cost,
-                    SUM((p.price - p.costing) * oi.quantity) AS total_profit
-                FROM orders o
-                JOIN order_items oi ON o.id = oi.order_id
-                JOIN product_variants pv ON oi.variant_id = pv.id
-                JOIN products p ON pv.product_id = p.id
-                GROUP BY month
-                ORDER BY month DESC
-            ";
-
-            $result = $conn->query($sql);
-            while ($row = $result->fetch_assoc()):
-            ?>
-            <tr>
-                <td><?= date("F Y", strtotime($row['month'] . "-01")) ?></td>
-                <td><?= $row['total_orders'] ?></td>
-                <td><?= $row['total_items_sold'] ?></td>
-                <td>₱<?= number_format($row['total_revenue'], 2) ?></td>
-                <td>₱<?= number_format($row['total_profit'], 2) ?></td>
-            </tr>
-            <?php endwhile; ?>
+                
             </tbody>
         </table>
-
-        <div id="logoutModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to log out?</p>
-            <div style="margin-top: 15px;">
-            <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
-            <button onclick="closeLogoutModal()">Cancel</button>
-            </div>
-        </div>
-        </div>
-        
     </main>
-        <!--Logout Confirmation Modal JS -->
-    <script>
-        function openLogoutModal() {
-        document.getElementById('logoutModal').style.display = 'block';
-        }
-
-        function closeLogoutModal() {
-        document.getElementById('logoutModal').style.display = 'none';
-        }
-
-        function confirmLogout() {
-        window.location.href = '../logout.php'; // Adjust path if needed
-        }
-    </script>
-
-    <script src="/Neverlonely/Assets/javascript/script.js"></script>
     <script src="/Neverlonely/Assets/javascript/sidebar.js"></script>
 </body>
 </html>

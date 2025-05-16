@@ -72,7 +72,6 @@ if (!isset($_SESSION['user_id'])) {
                     <th>Quantity</th>
                     <th>Total Amount</th>
                     <th>Time</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -142,9 +141,6 @@ if (!isset($_SESSION['user_id'])) {
                                     )), 2) ?>
                                 </td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= date("Y-m-d h:i A", strtotime($row['order_date'])) ?></td>
-                                <td rowspan="<?= $orderRowCounts[$order_id] ?>">
-                                    <button class="transactionDelete-btn" data-id="<?= $order_id ?>">Delete</button>
-                                </td>
                             <?php } ?>
                         </tr>
                         <?php

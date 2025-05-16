@@ -75,6 +75,14 @@ if (!isset($_SESSION['user_id'])) {
                 </a>
             </li>
 
+            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'archives.php') ? 'active' : ''; ?>">
+                <a href="/Neverlonely/admin/archives.php">
+            <span class="material-icons">archive
+            </span>
+                    <span>Archive</span>
+                </a>
+            </li>
+
             <li>
                 <a onclick="openLogoutModal()">
                     <span class="material-icons">logout</span>

@@ -73,6 +73,14 @@ if (!isset($_SESSION['user_id'])) {
                 </a>
             </li>
 
+            <li class="<?=(basename($_SERVER['PHP_SELF']) == 'archives.php') ? 'active' : ''; ?>">
+                <a href="/Neverlonely/admin/archives.php">
+            <span class="material-icons">archive
+            </span>
+                    <span>Archive</span>
+                </a>
+            </li>
+
             <li>
                 <a onclick="openLogoutModal()">
                     <span class="material-icons">logout</span>
@@ -172,7 +180,7 @@ if (!isset($_SESSION['user_id'])) {
                                 </td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= date("Y-m-d h:i A", strtotime($row['order_date'])) ?></td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>">
-                                    <button class="transactionDelete-btn" data-id="<?= $order_id ?>">Delete</button>
+                                    <button class="transactionDelete-btn" data-id="<?= $order_id ?>">Archive</button>
                                 </td>
                             <?php } ?>
                         </tr>
