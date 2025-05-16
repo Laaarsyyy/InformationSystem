@@ -100,7 +100,29 @@
                 </tr>
             </thead>
             <tbody>
-                
+                <?php
+                    include '../config.php';
+                    $sql = "SELECT * FROM archived_sales ORDER BY order_date DESC";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0):
+                        while ($row = $result->fetch_assoc()):
+                    ?>
+                    <tr>
+                        <td><?= $row['order_id'] ?></td>
+                        <td><?= htmlspecialchars($row['customer_name']) ?></td>
+                        <td><?= htmlspecialchars($row['product_name']) ?></td>
+                        <td><?= $row['size'] ?></td>
+                        <td><?= $row['quantity'] ?></td>
+                        <td>₱<?= number_format($row['total_price'], 2) ?></td>
+                        <td><?= date('Y-m-d h:i A', strtotime($row['order_date'])) ?></td>
+                    </tr>
+                    <?php
+                        endwhile;
+                    else:
+                    ?>
+                    <tr><td colspan="7">No archived sales found.</td></tr>
+                    <?php endif; ?>
             </tbody>
         </table>
     </main>

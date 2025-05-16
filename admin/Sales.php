@@ -180,7 +180,7 @@ if (!isset($_SESSION['user_id'])) {
                                 </td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= date("Y-m-d h:i A", strtotime($row['order_date'])) ?></td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>">
-                                    <button class="transactionDelete-btn" data-id="<?= $order_id ?>">Archive</button>
+                                    <button class="transactionArchive-btn" data-id="<?= $order_id ?>">Archive</button>
                                 </td>
                             <?php } ?>
                         </tr>
@@ -265,10 +265,61 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
         </div>
+                    <!-- Archive Confirmation Modal-->
+        <div id="archiveConfirmModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Confirm Archive</h3>
+                <p>Are you sure you want to archive this sale?</p>
+                <div style="margin-top: 15px;">
+                <button id="confirmArchiveBtn">Yes, Archive</button>
+                <button onclick="closeArchiveModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
 
     </main> 
 
-        <!--Sidebar JS (di nagana pag nasa js file) -->
+    <!-- Archive Transaction Modal -->
+    <script>
+let selectedOrderId = null;
+
+document.querySelectorAll('.transactionArchive-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        selectedOrderId = this.dataset.id;
+        document.getElementById('archiveConfirmModal').style.display = 'block';
+    });
+});
+
+document.getElementById('confirmArchiveBtn').addEventListener('click', function () {
+    if (selectedOrderId) {
+        fetch('archiveSale.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order_id: selectedOrderId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Sale archived successfully!');
+                location.reload();
+            } else {
+                alert('Failed to archive sale.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+        closeArchiveModal();
+    }
+});
+
+function closeArchiveModal() {
+    document.getElementById('archiveConfirmModal').style.display = 'none';
+}
+
+    </script>
+
+        <!--Sidebar JS (it doesn't work if it is in js file) -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
     const toggleButton = document.getElementById('toggle-btn');
