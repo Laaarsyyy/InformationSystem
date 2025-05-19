@@ -79,7 +79,7 @@ if (!isset($_SESSION['user_id'])) {
             </li>
 
             <li>
-                <a onclick="openLogoutModal()">
+                <a onclick="openLogoutModal()" style="cursor: pointer;">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
@@ -129,16 +129,18 @@ if (!isset($_SESSION['user_id'])) {
             </tbody>
         </table>
 
-            <div id="logoutModal" class="modal" style="display: none;">
-            <div class="modal-content">
+            <!-- Logout Confirmation Modal-->
+        <div id="logoutModal" class="modal" style="display: none;">
+            <div class="logoutModal-content">
+                <span class="close" onclick="closeLogoutModal()">&times;</span>
                 <h3>Confirm Logout</h3>
                 <p>Are you sure you want to log out?</p>
-                <div style="margin-top: 15px;">
-                <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
-                <button onclick="closeLogoutModal()">Cancel</button>
+                <div class="logoutButtons" style="margin-top: 15px;">
+                    <button class="confirmLogout" href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                    <button class="cancelLogout" onclick="closeLogoutModal()">Cancel</button>
                 </div>
             </div>
-            </div>
+        </div>
     </main>
     
     <!-- Add User Modal -->
@@ -166,7 +168,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Edit User Modal -->
     <div id="editUserModal" class="modal" style="display:none;">
-        <div class="modal-content">
+        <div class="editUserModal-content">
             <span class="close" onclick="closeEditUserModal()">&times;</span>
             <h2>Edit User</h2>
             <form action="editUser.php" method="POST">
@@ -183,24 +185,25 @@ if (!isset($_SESSION['user_id'])) {
                         <option value="admin">Admin</option>
                     </select>
                 </label>
-                <button type="submit">Update User</button>
+                <button class="updateUser-button" type="submit">Update User</button>
             </form>
         </div>
     </div>
 
     <!-- Delete User Modal -->
     <div id="confirmDeleteModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeDeleteModal()">&times;</span>
-        <h3>Are you sure you want to delete this user?</h3>
-        <form id="deleteUserForm" method="POST" action="deleteUser.php">
-            <input type="hidden" name="user_id" id="deleteUserId">
-            <div class="modal-buttons">
-                <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-            </div>
-        </form>
-    </div>
+        <div class="archiveModal-content">
+            <span class="transaction-close" onclick="closeDeleteModal()">&times;</span>
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete this user?</p>
+            <form id="deleteUserForm" method="POST" action="deleteUser.php">
+                <input type="hidden" name="user_id" id="deleteUserId">
+                <div class="deleteUsers-buttons">
+                    <button type="submit" class="deleteUsersYes">Yes, Delete</button>
+                    <button type="button" class="deleteUsersNo" onclick="closeDeleteModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 
 
@@ -248,22 +251,22 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Delete User Modal JS -->
     <script>
-function openDeleteModal(userId) {
-    document.getElementById('deleteUserId').value = userId;
-    document.getElementById('confirmDeleteModal').style.display = 'block';
-}
+        function openDeleteModal(userId) {
+            document.getElementById('deleteUserId').value = userId;
+            document.getElementById('confirmDeleteModal').style.display = 'block';
+        }
 
-function closeDeleteModal() {
-    document.getElementById('confirmDeleteModal').style.display = 'none';
-}
+        function closeDeleteModal() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        }
 
-// Optional: close when clicking outside the modal
-window.onclick = function(event) {
-    const modal = document.getElementById('confirmDeleteModal');
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
+        //Close when clicking outside the modal
+        window.onclick = function(event) {
+            const modal = document.getElementById('confirmDeleteModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 
         <!--Logout Confirmation Modal JS -->

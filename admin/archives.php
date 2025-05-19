@@ -72,7 +72,7 @@
             </li>
 
             <li>
-                <a onclick="openLogoutModal()">
+                <a onclick="openLogoutModal()" style="cursor: pointer;">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
@@ -83,7 +83,6 @@
     <main>
         <div class="manage-products-container">
             <h1>Sales Records</h1>
-            <button onclick="openTransactionModal()" class="createTransac-btn">Create Transaction</button>
         </div>
 
 
@@ -102,30 +101,87 @@
             <tbody>
                 <?php
                     include '../config.php';
-                    $sql = "SELECT * FROM archived_sales ORDER BY order_date DESC";
+                    $sql = "SELECT * FROM archived_sales ORDER BY order_date DESC, order_id DESC";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0):
-                        while ($row = $result->fetch_assoc()):
-                    ?>
-                    <tr>
-                        <td><?= $row['order_id'] ?></td>
-                        <td><?= htmlspecialchars($row['customer_name']) ?></td>
+                        $rows = [];
+                        while ($row = $result->fetch_assoc()) {
+                            $rows[] = $row;
+                        }
+                        // Count rows per order_id
+                        $orderRowCounts = [];
+                        foreach ($rows as $row) {
+                            $orderRowCounts[$row['order_id']] = isset($orderRowCounts[$row['order_id']])
+                                ? $orderRowCounts[$row['order_id']] + 1
+                                : 1;
+                        }
+                        $printedOrderIds = [];
+                        $orderPrintedCount = [];
+                        foreach ($rows as $row) {
+                            $order_id = $row['order_id'];
+                            if (!isset($orderPrintedCount[$order_id])) {
+                                $orderPrintedCount[$order_id] = 1;
+                            } else {
+                                $orderPrintedCount[$order_id]++;
+                            }
+                            $isLastRowOfOrder = $orderPrintedCount[$order_id] === $orderRowCounts[$order_id];
+                ?>
+                    <tr style="<?= $isLastRowOfOrder ? 'border-bottom: 2px solid black;' : '' ?>">
+                        <?php if (!in_array($order_id, $printedOrderIds)) { ?>
+                            <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= $order_id ?></td>
+                            <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= htmlspecialchars($row['customer_name']) ?></td>
+                        <?php } ?>
                         <td><?= htmlspecialchars($row['product_name']) ?></td>
                         <td><?= $row['size'] ?></td>
                         <td><?= $row['quantity'] ?></td>
-                        <td>₱<?= number_format($row['total_price'], 2) ?></td>
-                        <td><?= date('Y-m-d h:i A', strtotime($row['order_date'])) ?></td>
+                        <?php if (!in_array($order_id, $printedOrderIds)) { ?>
+                            <td rowspan="<?= $orderRowCounts[$order_id] ?>">
+                                ₱<?= number_format(array_sum(array_column(
+                                    array_filter($rows, fn($r) => $r['order_id'] === $order_id),
+                                    'total_price'
+                                )), 2) ?>
+                            </td>
+                            <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= date('Y-m-d h:i A', strtotime($row['order_date'])) ?></td>
+                        <?php } ?>
                     </tr>
-                    <?php
-                        endwhile;
+                <?php
+                            $printedOrderIds[] = $order_id;
+                        }
                     else:
-                    ?>
+                ?>
                     <tr><td colspan="7">No archived sales found.</td></tr>
-                    <?php endif; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </main>
+            <!-- Logout Confirmation Modal-->
+        <div id="logoutModal" class="modal" style="display: none;">
+            <div class="logoutModal-content">
+                <span class="close" onclick="closeLogoutModal()">&times;</span>
+                <h3>Confirm Logout</h3>
+                <p>Are you sure you want to log out?</p>
+                <div class="logoutButtons" style="margin-top: 15px;">
+                    <button class="confirmLogout" href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                    <button class="cancelLogout" onclick="closeLogoutModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+            <!--Logout Confirmation Modal JS -->
+    <script>
+        function openLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'block';
+        }
+
+        function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        function confirmLogout() {
+        window.location.href = '../logout.php'; // Adjust path if needed
+        }
+    </script>
     <script src="/Neverlonely/Assets/javascript/sidebar.js"></script>
 </body>
 </html>

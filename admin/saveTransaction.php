@@ -24,7 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Prepare statements
         $insertItemStmt = $conn->prepare("INSERT INTO order_items (order_id, variant_id, quantity) VALUES (?, ?, ?)");
-        $stockCheckStmt = $conn->prepare("SELECT stock_quantity FROM product_variants WHERE id = ?");
+        $stockCheckStmt = $conn->prepare("
+            SELECT pv.stock_quantity, p.name, pv.size 
+            FROM product_variants pv 
+            JOIN products p ON pv.product_id = p.id 
+            WHERE pv.id = ?
+        ");
         $updateStockStmt = $conn->prepare("UPDATE product_variants SET stock_quantity = stock_quantity - ? WHERE id = ?");
 
         for ($i = 0; $i < count($variant_ids); $i++) {
@@ -38,8 +43,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $row = $result->fetch_assoc();
 
             if (!$row || $row['stock_quantity'] < $quantity) {
-                throw new Exception("Insufficient stock for variant ID $variant_id");
+                $conn->rollback();
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Insufficient stock for ' . $row['name'] . ' (' . $row['size'] . ')'
+                ]);
+                exit;
             }
+
 
             // Insert into order_items
             $insertItemStmt->bind_param("iii", $order_id, $variant_id, $quantity);
@@ -56,12 +67,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $updateStockStmt->close();
 
         $conn->commit();
-        header("Location: Sales.php");
+        echo json_encode([
+            'success' => true,
+            'message' => 'Transaction completed successfully'
+        ]);
         exit;
 
     } catch (Exception $e) {
         $conn->rollback();
-        die("Transaction failed: " . $e->getMessage());
+        echo json_encode([
+            'success' => false,
+            'error' => 'Transaction failed: ' . $e->getMessage()
+        ]);
+        exit;
     }
 }
 ?>

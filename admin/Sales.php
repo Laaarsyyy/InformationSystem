@@ -82,7 +82,7 @@ if (!isset($_SESSION['user_id'])) {
             </li>
 
             <li>
-                <a onclick="openLogoutModal()">
+                <a onclick="openLogoutModal()" style="cursor: pointer;">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
@@ -254,31 +254,121 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
 
-                        <!-- Logout Modal-->
+        <!-- Error Modal -->
+        <div id="errorModal" class="modal" style="display: none;">
+            <div class="errorModal-content">
+                <span class="transaction-close" onclick="closeErrorModal()">&times;</span>
+                <h3>Error</h3>
+                <p id="errorModalMessage">Something went wrong.</p>
+                <div style="margin-top: 15px;">
+                    <button class="errorModal-btn" onclick="closeErrorModal()">Go back</button>
+                </div>
+            </div>
+        </div>
+
+            <!-- Logout Confirmation Modal-->
         <div id="logoutModal" class="modal" style="display: none;">
-            <div class="modal-content">
+            <div class="logoutModal-content">
+                <span class="close" onclick="closeLogoutModal()">&times;</span>
                 <h3>Confirm Logout</h3>
                 <p>Are you sure you want to log out?</p>
-                <div style="margin-top: 15px;">
-                <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
-                <button onclick="closeLogoutModal()">Cancel</button>
+                <div class="logoutButtons" style="margin-top: 15px;">
+                    <button class="confirmLogout" href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                    <button class="cancelLogout" onclick="closeLogoutModal()">Cancel</button>
                 </div>
             </div>
         </div>
+
+        
                     <!-- Archive Confirmation Modal-->
         <div id="archiveConfirmModal" class="modal" style="display: none;">
-            <div class="modal-content">
+            
+            <div class="archiveModal-content">
+                <span class="transaction-close" onclick="closeArchiveModal()">&times;</span>
                 <h3>Confirm Archive</h3>
                 <p>Are you sure you want to archive this sale?</p>
-                <div style="margin-top: 15px;">
-                <button id="confirmArchiveBtn">Yes, Archive</button>
-                <button onclick="closeArchiveModal()">Cancel</button>
+                <div class="archiveButtons" style="margin-top: 15px;">
+                    <button class="archiveYes" id="confirmArchiveBtn">Yes, Archive</button>
+                    <button class="archiveNo" onclick="closeArchiveModal()">Cancel</button>
                 </div>
             </div>
         </div>
-
-
+        <!-- Archive Success Modal -->
+        <div id="archiveSuccessModal" class="modal" style="display: none;">
+            <div class="errorModal-content">
+                <span class="transaction-close" onclick="closeArchiveSuccessModal()">&times;</span>
+                <h3>Success</h3>
+                <p>Sale archived successfully!</p>
+                <div style="margin-top: 15px;">
+                    <button class="errorModal-btn" onclick="closeArchiveSuccessModal()">OK</button>
+                </div>
+            </div>
+        </div>
+        <!-- Sale Success Modal -->
+        <div id="saleSuccessModal" class="modal" style="display: none;">
+            <div class="errorModal-content">
+                <span class="transaction-close" onclick="closeSaleSuccessModal()">&times;</span>
+                <h3>Success</h3>
+                <p>Paldo na naman!</p>
+                <div style="margin-top: 15px;">
+                    <button class="errorModal-btn" onclick="closeSaleSuccessModal()">OK</button>
+                </div>
+            </div>
+        </div>
     </main> 
+
+    <script>
+        function showErrorModal(message) {
+            document.getElementById('errorModalMessage').innerText = message;
+            document.getElementById('errorModal').style.display = 'block';
+        }
+
+        function closeErrorModal() {
+            document.getElementById('errorModal').style.display = 'none';
+        }
+    </script>
+
+            <!--Logout Confirmation Modal JS -->
+    <script>
+        function openLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'block';
+        }
+
+        function closeLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        function confirmLogout() {
+        window.location.href = '../logout.php'; // Adjust path if needed
+        }
+    </script>
+
+
+    <script>
+        document.querySelector('form[action="saveTransaction.php"]').addEventListener('submit', function(e) {
+            e.preventDefault(); // prevents full page reload
+
+            const formData = new FormData(this);
+            
+            fetch('saveTransaction.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Response:', data); // Debug log
+                if (data.success) {
+                    showSaleSuccessModal();
+                } else {
+                    showErrorModal(data.error || 'An error occurred');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error); // Debug log
+                showErrorModal('An error occurred while processing your request.');
+            });
+        });
+    </script>
 
     <!-- Archive Transaction Modal -->
     <script>
@@ -301,8 +391,7 @@ document.getElementById('confirmArchiveBtn').addEventListener('click', function 
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Sale archived successfully!');
-                location.reload();
+                showArchiveSuccessModal();
             } else {
                 alert('Failed to archive sale.');
             }
@@ -317,6 +406,14 @@ function closeArchiveModal() {
     document.getElementById('archiveConfirmModal').style.display = 'none';
 }
 
+function showArchiveSuccessModal() {
+    document.getElementById('archiveSuccessModal').style.display = 'block';
+}
+function closeArchiveSuccessModal() {
+    document.getElementById('archiveSuccessModal').style.display = 'none';
+    location.reload(); // reload after closing modal
+}
+
     </script>
 
         <!--Sidebar JS (it doesn't work if it is in js file) -->
@@ -329,10 +426,20 @@ function closeArchiveModal() {
         toggleButton.addEventListener('click', function () {
             sidebar.classList.toggle('close');
             toggleButton.classList.toggle('rotate');
-        });
-    }
-});
+            });
+        }
+    });
+    </script>
+    <script>
+        function showSaleSuccessModal() {
+            document.getElementById('saleSuccessModal').style.display = 'block';
+        }
+        function closeSaleSuccessModal() {
+            document.getElementById('saleSuccessModal').style.display = 'none';
+            location.reload();
+        }
     </script>
     <script src="/Neverlonely/Assets/javascript/script.js"></script>
 </body>
 </html>
+

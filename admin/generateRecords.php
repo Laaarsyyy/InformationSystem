@@ -134,15 +134,17 @@ require '../config.php';
             </tbody>
         </table>
 
+            <!-- Logout Confirmation Modal-->
         <div id="logoutModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to log out?</p>
-            <div style="margin-top: 15px;">
-            <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
-            <button onclick="closeLogoutModal()">Cancel</button>
+            <div class="logoutModal-content">
+                <span class="close" onclick="closeLogoutModal()">&times;</span>
+                <h3>Confirm Logout</h3>
+                <p>Are you sure you want to log out?</p>
+                <div class="logoutButtons" style="margin-top: 15px;">
+                    <button class="confirmLogout" href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                    <button class="cancelLogout" onclick="closeLogoutModal()">Cancel</button>
+                </div>
             </div>
-        </div>
         </div>
         
     </main>

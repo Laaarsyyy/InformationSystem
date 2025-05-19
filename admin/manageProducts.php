@@ -72,7 +72,7 @@ if (!isset($_SESSION['user_id'])) {
             </li>
 
             <li>
-                <a onclick="openLogoutModal()">
+                <a onclick="openLogoutModal()" style="cursor: pointer;">
                     <span class="material-icons">logout</span>
                     <span>Logout</span>
                 </a>
@@ -230,13 +230,15 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
 
+            <!-- Logout Confirmation Modal-->
         <div id="logoutModal" class="modal" style="display: none;">
-            <div class="modal-content">
+            <div class="logoutModal-content">
+                <span class="close" onclick="closeLogoutModal()">&times;</span>
                 <h3>Confirm Logout</h3>
                 <p>Are you sure you want to log out?</p>
-                <div style="margin-top: 15px;">
-                <button href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
-                <button onclick="closeLogoutModal()">Cancel</button>
+                <div class="logoutButtons" style="margin-top: 15px;">
+                    <button class="confirmLogout" href="../logout.php" onclick="confirmLogout()">Yes, Logout</button>
+                    <button class="cancelLogout" onclick="closeLogoutModal()">Cancel</button>
                 </div>
             </div>
         </div>
