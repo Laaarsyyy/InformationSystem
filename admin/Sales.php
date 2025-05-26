@@ -180,7 +180,10 @@ if (!isset($_SESSION['user_id'])) {
                                 </td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= date("Y-m-d h:i A", strtotime($row['order_date'])) ?></td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>">
-                                    <button class="transactionArchive-btn" data-id="<?= $order_id ?>">Archive</button>
+                                    <div class="actionBtns">
+                                        <button class="cancel-btn" data-id="<?= $order_id ?>">Cancel Order</button>
+                                        <button class="transactionArchive-btn" data-id="<?= $order_id ?>">Archive</button>
+                                    </div>
                                 </td>
                             <?php } ?>
                         </tr>
@@ -293,6 +296,29 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
         </div>
+
+                <!-- Confirm Cancel Order mMdal -->
+        <div id="cancelConfirmModal" class="modal" style="display: none;">
+            <div class="archiveModal-content">
+                <span class="transaction-close" onclick="document.getElementById('cancelConfirmModal').style.display='none'">&times;</span>
+                <h3>Confirm Cancellation</h3>
+                <p>Are you sure you want to cancel this order?</p>
+                <div class="cancelBtnsModal" style="margin-top: 15px;">
+                    <button class="confirmCancel" id="confirmCancelBtn">Yes, Cancel</button>
+                    <button class="cancelNo" onclick="document.getElementById('cancelConfirmModal').style.display='none'">No</button>
+                </div>
+            </div>
+<       /div>
+
+        <!-- Cancel Order Success Modal -->
+        <div id="cancelSuccessModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Order Cancelled</h3>
+                <p>The order has been cancelled and stock restored.</p>
+                <button id="closeSuccessBtn">OK</button>
+            </div>
+        </div>
+
         <!-- Archive Success Modal -->
         <div id="archiveSuccessModal" class="modal" style="display: none;">
             <div class="errorModal-content">
@@ -430,6 +456,61 @@ function closeArchiveSuccessModal() {
         }
     });
     </script>
+
+        <!-- Cancel Order JS -->
+    <script>
+        let orderToCancel = null;
+
+        // Open confirmation modal
+        document.querySelectorAll('.cancel-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                orderToCancel = this.getAttribute('data-id');
+                document.getElementById('cancelConfirmModal').style.display = 'block';
+            });
+        });
+
+        // Confirm cancel
+        document.getElementById('confirmCancelBtn').addEventListener('click', function () {
+            if (orderToCancel) {
+                fetch('cancelOrder.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ order_id: orderToCancel })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the row from the table
+                        const row = document.querySelector(`.cancel-btn[data-id="${orderToCancel}"]`).closest('tr');
+                        if (row) row.remove();
+
+                        // Show modal
+                        document.getElementById('cancelSuccessModal').style.display = 'block';
+                    } else {
+                        alert("Failed to cancel: " + (data.error || "Unknown error"));
+                    }
+                });
+
+                document.getElementById('cancelConfirmModal').style.display = 'none';
+            }
+        });
+
+        function closeCancelModal() {
+            document.getElementById('cancelConfirmModal').style.display = 'none';
+        }
+    </script>
+
+        <!-- Close Cancel order modal-->
+    <script>
+        function closeCancelSuccessModal() {
+            document.getElementById('closeSuccessBtn').addEventListener('click', function () {
+                location.reload(); // refresh the page
+            });
+        }
+    </script>
+
     <script>
         function showSaleSuccessModal() {
             document.getElementById('saleSuccessModal').style.display = 'block';

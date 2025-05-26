@@ -716,15 +716,51 @@ input[type="file"] {
 
 
 /* Sales Contents -----  */
+.actionBtns {
+    display: flex;
+    justify-content: space-between;
+}
 
 .transactionArchive-btn {
-    width: 100%;
+    width: 50%;
     border-radius: 5px;
     cursor: pointer;
     color: var(--second-text);
     background-color: var(--text);
     border: 1px solid var(--text);
 }
+
+.cancel-btn {
+    width: 45%;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--text);
+    background-color: transparent;
+    border: 1px solid var(--text);
+}
+
+.cancelBtnsModal {
+    width: 35%;
+    position: absolute;
+    top: 70%;
+    left: 60%;
+}
+
+.confirmCancel {
+    border-radius: 3px;
+    width: 100px;
+    margin-right: 10px;
+    background-color: var(--text);
+    color: var(--second-text);
+}
+
+.cancelNo {
+    width: 30%;
+    background-color: transparent;
+    border: 1px solid var(--text);
+}
+
+
 
 
 /* Archive Confirmation Modal -----  */
@@ -775,8 +811,6 @@ input[type="file"] {
     background-color: transparent;
     color: var(--text);
 }
-
-
 
 .deleteUsers-buttons {
     width: 50%;
@@ -838,7 +872,6 @@ input[type="file"] {
     left: 55%;
     top: 65%;
     position: absolute;
-
 }
 
 .confirmLogout {
