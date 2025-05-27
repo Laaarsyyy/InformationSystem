@@ -166,7 +166,6 @@ if (!isset($_SESSION['user_id'])) {
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= htmlspecialchars($order_id) ?></td>
                                 <td rowspan="<?= $orderRowCounts[$order_id] ?>"><?= htmlspecialchars($row['customer_name']) ?></td>
                             <?php } ?>
-
                             <td><?= htmlspecialchars($row['product_name']) ?></td>
                             <td><?= htmlspecialchars($row['size']) ?></td>
                             <td><?= htmlspecialchars($row['quantity']) ?></td>
@@ -203,56 +202,57 @@ if (!isset($_SESSION['user_id'])) {
             <div class="transaction-modal-content">
                 <span class="transaction-close" onclick="closeTransactionModal()">&times;</span>
                 <h2>Create Transaction</h2>
-                <form action="saveTransaction.php" method="POST" onsubmit="return validateTransaction()">
+                <form id="transactionForm">
                     <label>Customer Name:
                         <input type="text" name="customer_name" required>
                     </label>
 
-                <div id="transaction-items">
-                    <div class="transaction-item-group">
-                    <label>Product Variant:
-                        <select name="variant_ids[]" onchange="updateSubtotal(this)">
-                            <?php
-                            // Fetch variants with stock info
-                            $variants = $conn->query("
-                                SELECT pv.id, p.name, pv.size, p.price, pv.stock_quantity 
-                                FROM product_variants pv 
-                                JOIN products p ON pv.product_id = p.id
-                            ");
+                    <div id="transaction-items">
+                        <div class="transaction-item-group">
+                            <label>Product Variant:
+                                <select name="variant_ids[]" onchange="updateSubtotal(this)">
+                                    <?php
+                                    // Fetch variants with stock info
+                                    $variants = $conn->query("
+                                        SELECT pv.id, p.name, pv.size, p.price, pv.stock_quantity 
+                                        FROM product_variants pv 
+                                        JOIN products p ON pv.product_id = p.id
+                                    ");
 
-                            while ($v = $variants->fetch_assoc()):
-                                if ($v['stock_quantity'] > 0):
-                            ?>
-                                <option value="<?= $v['id'] ?>" data-price="<?= $v['price'] ?>">
-                                    <?= htmlspecialchars($v['name']) ?> (<?= htmlspecialchars($v['size']) ?>) - ₱<?= number_format($v['price'], 2) ?>
-                                </option>
-                            <?php else: ?>
-                                <option disabled>
-                                    <?= htmlspecialchars($v['name']) ?> (<?= htmlspecialchars($v['size']) ?>) - Out of Stock
-                                </option>
-                            <?php 
-                                endif;
-                            endwhile; 
-                            ?>
-                        </select>
-                    </label>
+                                    while ($v = $variants->fetch_assoc()):
+                                        if ($v['stock_quantity'] > 0):
+                                    ?>
+                                        <option value="<?= $v['id'] ?>" data-price="<?= $v['price'] ?>">
+                                            <?= htmlspecialchars($v['name']) ?> (<?= htmlspecialchars($v['size']) ?>) - ₱<?= number_format($v['price'], 2) ?>
+                                        </option>
+                                    <?php else: ?>
+                                        <option disabled>
+                                            <?= htmlspecialchars($v['name']) ?> (<?= htmlspecialchars($v['size']) ?>) - Out of Stock
+                                        </option>
+                                    <?php 
+                                        endif;
+                                    endwhile; 
+                                    ?>
+                                </select>
+                            </label>
 
-                    <label>Quantity:
-                        <input type="number" name="quantities[]" min="1" value="1" oninput="updateSubtotal(this)" required>
-                    </label>
+                            <label>Quantity:
+                                <input type="number" name="quantities[]" min="1" value="1" oninput="updateSubtotal(this)" required>
+                            </label>
 
-                    <p class="transaction-subtotal-text">Subtotal: ₱<span class="transaction-subtotal">0.00</span></p>
+                            <p class="transaction-subtotal-text">Subtotal: ₱<span class="transaction-subtotal">0.00</span></p>
 
-                    <button type="button" class="transaction-removeSize-btn" onclick="removeTransactionItem(this)">Remove</button>
+                            <button type="button" class="transaction-removeSize-btn" onclick="removeTransactionItem(this)">Remove</button>
+                        </div>
                     </div>
-                </div>
-                <div class="transaction-footer">
-                    <h3>Total: ₱<span id="transaction-total">0.00</span></h3>
-                    <div class="transactionFooter-btns">
-                        <button class="transactionAddItem" type="button" onclick="addTransactionItem()">Add Another Item</button>
-                        <button class="transactionSubmit" type="submit">Submit Transaction</button>
+
+                    <div class="transaction-footer">
+                        <h3>Total: ₱<span id="transaction-total">0.00</span></h3>
+                        <div class="transactionFooter-btns">
+                            <button class="transactionAddItem" type="button" onclick="addTransactionItem()">Add Another Item</button>
+                            <button class="transactionSubmit" type="submit">Submit Transaction</button>
+                        </div>
                     </div>
-                </div>
                 </form>
             </div>
         </div>
@@ -297,25 +297,27 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
 
-                <!-- Confirm Cancel Order mMdal -->
+            <!-- Confirm Cancel Order mMdal -->
         <div id="cancelConfirmModal" class="modal" style="display: none;">
             <div class="archiveModal-content">
                 <span class="transaction-close" onclick="document.getElementById('cancelConfirmModal').style.display='none'">&times;</span>
                 <h3>Confirm Cancellation</h3>
                 <p>Are you sure you want to cancel this order?</p>
-                <div class="cancelBtnsModal" style="margin-top: 15px;">
+                <div class="cancelBtnsModal">
                     <button class="confirmCancel" id="confirmCancelBtn">Yes, Cancel</button>
                     <button class="cancelNo" onclick="document.getElementById('cancelConfirmModal').style.display='none'">No</button>
                 </div>
             </div>
-<       /div>
+        </div>
 
         <!-- Cancel Order Success Modal -->
         <div id="cancelSuccessModal" class="modal" style="display: none;">
-            <div class="modal-content">
+            <div class="archiveModal-content">
                 <h3>Order Cancelled</h3>
                 <p>The order has been cancelled and stock restored.</p>
-                <button id="closeSuccessBtn">OK</button>
+                <div class="cancelBtnsModal">
+                    <button class="confirmCancel" id="closeSuccessBtn" style="margin-left: 50px;">OK</button>
+                </div>
             </div>
         </div>
 
@@ -344,14 +346,68 @@ if (!isset($_SESSION['user_id'])) {
     </main> 
 
     <script>
-        function showErrorModal(message) {
-            document.getElementById('errorModalMessage').innerText = message;
-            document.getElementById('errorModal').style.display = 'block';
+        // Function to show success modal
+        function showSaleSuccessModal() {
+            const modal = document.getElementById('saleSuccessModal');
+            if (modal) {
+                modal.style.display = 'block';
+                console.log('Success modal should be visible now');
+            } else {
+                console.error('Success modal element not found');
+            }
         }
 
+        // Function to close success modal
+        function closeSaleSuccessModal() {
+            const modal = document.getElementById('saleSuccessModal');
+            if (modal) {
+                modal.style.display = 'none';
+                window.location.reload();
+            }
+        }
+
+        document.querySelector('form[action="saveTransaction.php"]').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('saveTransaction.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success === true) {
+                    showSaleSuccessModal();
+                } else {
+                    showErrorModal(data.error || 'An error occurred while saving the transaction');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorModal('An error occurred while processing your request');
+            });
+        });
+
+        // Function to show error modal
+        function showErrorModal(message) {
+            const errorModal = document.getElementById('errorModal');
+            document.getElementById('errorModalMessage').innerText = message;
+            errorModal.style.display = 'block';
+        }
+
+        // Function to close error modal
         function closeErrorModal() {
             document.getElementById('errorModal').style.display = 'none';
         }
+
+        // Initialize quantity inputs to 1
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInputs = document.querySelectorAll('input[name="quantities[]"]');
+            quantityInputs.forEach(input => {
+                input.value = 1;
+            });
+        });
     </script>
 
             <!--Logout Confirmation Modal JS -->
@@ -371,74 +427,83 @@ if (!isset($_SESSION['user_id'])) {
 
 
     <script>
-        document.querySelector('form[action="saveTransaction.php"]').addEventListener('submit', function(e) {
-            e.preventDefault(); // prevents full page reload
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
             const formData = new FormData(this);
-            
+
             fetch('saveTransaction.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(res => res.json())
+            .then(response => response.json())
             .then(data => {
-                console.log('Response:', data); // Debug log
-                if (data.success) {
-                    showSaleSuccessModal();
+                console.log('Response:', data);
+
+                if (data.success === true) {
+                    const successModal = document.getElementById('saleSuccessModal');
+                    successModal.style.display = 'block';
+
+                    const okButton = successModal.querySelector('.errorModal-btn');
+                    okButton.onclick = function () {
+                        successModal.style.display = 'none';
+                        window.location.reload();
+                    };
                 } else {
-                    showErrorModal(data.error || 'An error occurred');
+                    showErrorModal(data.error || 'An error occurred while saving the transaction');
                 }
             })
             .catch(error => {
-                console.error('Error:', error); // Debug log
-                showErrorModal('An error occurred while processing your request.');
+                console.error('Error:', error);
+                showErrorModal('An error occurred while processing your request');
             });
         });
+
     </script>
 
     <!-- Archive Transaction Modal -->
     <script>
-let selectedOrderId = null;
+        let selectedOrderId = null;
 
-document.querySelectorAll('.transactionArchive-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        selectedOrderId = this.dataset.id;
-        document.getElementById('archiveConfirmModal').style.display = 'block';
-    });
-});
+        document.querySelectorAll('.transactionArchive-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                selectedOrderId = this.dataset.id;
+                document.getElementById('archiveConfirmModal').style.display = 'block';
+            });
+        });
 
-document.getElementById('confirmArchiveBtn').addEventListener('click', function () {
-    if (selectedOrderId) {
-        fetch('archiveSale.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ order_id: selectedOrderId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showArchiveSuccessModal();
-            } else {
-                alert('Failed to archive sale.');
+        document.getElementById('confirmArchiveBtn').addEventListener('click', function () {
+            if (selectedOrderId) {
+                fetch('archiveSale.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: selectedOrderId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showArchiveSuccessModal();
+                    } else {
+                        alert('Failed to archive sale.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+                closeArchiveModal();
             }
-        })
-        .catch(error => console.error('Error:', error));
+        });
 
-        closeArchiveModal();
-    }
-});
+        function closeArchiveModal() {
+            document.getElementById('archiveConfirmModal').style.display = 'none';
+        }
 
-function closeArchiveModal() {
-    document.getElementById('archiveConfirmModal').style.display = 'none';
-}
-
-function showArchiveSuccessModal() {
-    document.getElementById('archiveSuccessModal').style.display = 'block';
-}
-function closeArchiveSuccessModal() {
-    document.getElementById('archiveSuccessModal').style.display = 'none';
-    location.reload(); // reload after closing modal
-}
+        function showArchiveSuccessModal() {
+            document.getElementById('archiveSuccessModal').style.display = 'block';
+        }
+        function closeArchiveSuccessModal() {
+            document.getElementById('archiveSuccessModal').style.display = 'none';
+            location.reload(); // reload after closing modal
+        }
 
     </script>
 
@@ -509,6 +574,15 @@ function closeArchiveSuccessModal() {
                 location.reload(); // refresh the page
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeBtn = document.getElementById('closeSuccessBtn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function () {
+                    location.reload();
+                });
+            }
+        });
     </script>
 
     <script>

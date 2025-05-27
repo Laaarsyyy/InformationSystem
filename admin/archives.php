@@ -101,7 +101,7 @@
             <tbody>
                 <?php
                     include '../config.php';
-                    $sql = "SELECT * FROM archived_sales ORDER BY order_date DESC, order_id DESC";
+                    $sql = "SELECT * FROM archived_sales ORDER BY archived_at DESC";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0):

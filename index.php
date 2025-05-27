@@ -13,7 +13,6 @@
     <img class="neverlogo" src="/Neverlonely/Assets/NEVER LONELY DISTRESSED LOGO black.png" alt="">
     
     <div class="wrapper">
-
         <div class="form-box login">
             <h2>Login</h2>
             <form action="login.php" method="POST">

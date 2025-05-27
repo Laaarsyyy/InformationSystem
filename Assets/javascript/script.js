@@ -209,3 +209,5 @@ function validateTransaction() {
     updateAllSubtotals();
     return true;
 }
+
+
