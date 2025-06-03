@@ -89,54 +89,78 @@ require '../config.php';
     <main>
         <div class="manage-products-container">
             <h1>Records</h1>
-            <button onclick="printRecords()">Print Records</button>
+            <button onclick="window.print()" style="width: 100px; color: white; background-color: black; border-radius: 5px;" >Print Records</button>
         </div>
+
+
+        <style>
+@media print {
+    body * {
+        display: none;
+    }
+
+    #printArea, #printArea * {
+        display: block;
+    }
+
+    #printArea {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 8px;
+    }
+}
+        </style>
         <div id="printArea">
-            <table class="products-table">
-                <table class="products-table">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Total Orders</th>
-                            <th>Total Quantity Sold</th>
-                            <th>Total Revenue</th>
-                            <th>Profit</th>
-                        </tr>
-                    </thead>
+    <table class="products-table">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Orders</th>
+                <th>Total Quantity Sold</th>
+                <th>Total Revenue</th>
+                <th>Profit</th>
+            </tr>
+        </thead>
 
-                    <tbody>
-                        <?php
-                    $sql = "
-                        SELECT 
-                            DATE_FORMAT(o.order_date, '%Y-%m') AS month,
-                            COUNT(DISTINCT o.id) AS total_orders,
-                            SUM(oi.quantity) AS total_items_sold,
-                            SUM(p.price * oi.quantity) AS total_revenue,
-                            SUM(p.costing * oi.quantity) AS total_cost,
-                            SUM((p.price - p.costing) * oi.quantity) AS total_profit
-                        FROM orders o
-                        JOIN order_items oi ON o.id = oi.order_id
-                        JOIN product_variants pv ON oi.variant_id = pv.id
-                        JOIN products p ON pv.product_id = p.id
-                        GROUP BY month
-                        ORDER BY month DESC
-                    ";
+        <tbody>
+            <?php
+            $sql = "
+                SELECT 
+                    DATE_FORMAT(o.order_date, '%Y-%m') AS month,
+                    COUNT(DISTINCT o.id) AS total_orders,
+                    SUM(oi.quantity) AS total_items_sold,
+                    SUM(p.price * oi.quantity) AS total_revenue,
+                    SUM(p.costing * oi.quantity) AS total_cost,
+                    SUM((p.price - p.costing) * oi.quantity) AS total_profit
+                FROM orders o
+                JOIN order_items oi ON o.id = oi.order_id
+                JOIN product_variants pv ON oi.variant_id = pv.id
+                JOIN products p ON pv.product_id = p.id
+                GROUP BY month
+                ORDER BY month DESC
+            ";
 
-                    $result = $conn->query($sql);
-                    while ($row = $result->fetch_assoc()):
-                    ?>
-                    <tr>
-                        <td><?= date("F Y", strtotime($row['month'] . "-01")) ?></td>
-                        <td><?= $row['total_orders'] ?></td>
-                        <td><?= $row['total_items_sold'] ?></td>
-                        <td>₱<?= number_format($row['total_revenue'], 2) ?></td>
-                        <td>₱<?= number_format($row['total_profit'], 2) ?></td>
-                    </tr>
-                    <?php endwhile; ?>
-                    </tbody>
-                </table>
-            </table>
-        </div>
+            $result = $conn->query($sql);
+            while ($row = $result->fetch_assoc()):
+            ?>
+            <tr>
+                <td><?= date("F Y", strtotime($row['month'] . "-01")) ?></td>
+                <td><?= $row['total_orders'] ?></td>
+                <td><?= $row['total_items_sold'] ?></td>
+                <td>₱<?= number_format($row['total_revenue'], 2) ?></td>
+                <td>₱<?= number_format($row['total_profit'], 2) ?></td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
 
 
             <!-- Logout Confirmation Modal-->

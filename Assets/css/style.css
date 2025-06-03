@@ -938,3 +938,40 @@ input[type="file"] {
         display: none; /* hide buttons when printing */
     }
 }
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    main, main * {
+        visibility: visible;
+    }
+
+    main {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    nav, #sidebar {
+        display: none !important;
+    }
+
+    .transaction-modal,
+    .modal,
+    .logoutModal-content {
+        display: none !important;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .products-table th,
+    .products-table td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+}
